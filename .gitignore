@@ -1,0 +1,10 @@
+.DS_Store
+node_modules/
+.env
+.env.local
+.vercel
+.netlify
+
+# heavy source assets not used by the deployed site
+media/3D/
+*.mov

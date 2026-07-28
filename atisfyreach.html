@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atisfyreach — Case Study · Alok Kachhap</title>
+  <meta name="description" content="Case study: revamping Atisfyreach, a brand-side influencer-marketing product." />
+  <link rel="icon" href="logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="ask-ai.css" />
+  <style>
+    :root {
+      --bg: #E7EAE3; --surface: #ffffff; --ink: #1a1c18; --muted: #5d6157;
+      --blue: #1a1ac9; --line: rgba(17,17,17,0.12); --maxw: 1080px;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: 'Hanken Grotesk', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; }
+    .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
+
+    /* fonts / headings */
+    .display { font-family: 'Fraunces', Georgia, serif; font-weight: 600;
+      font-variation-settings: 'opsz' 144, 'wght' 600; letter-spacing: -0.01em; line-height: 1; }
+    .eyebrow { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--blue); }
+    .sec-title { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-variation-settings: 'opsz' 144, 'wght' 600;
+      font-size: clamp(28px, 4vw, 48px); line-height: 1.02; letter-spacing: -0.01em; color: var(--ink); }
+    .lead { font-size: clamp(16px, 1.7vw, 19px); line-height: 1.65; color: var(--muted); max-width: 56ch; }
+    .lead b { color: var(--ink); font-weight: 600; }
+    .points { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; align-content: start; }
+    .points li { position: relative; padding-left: 26px; font-size: 15px; line-height: 1.5; color: var(--ink); }
+    .points li::before { content: ""; position: absolute; left: 0; top: 7px; width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+
+    /* header */
+    .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: clamp(13px, 2.2vh, 20px) clamp(18px, 4vw, 40px);
+      background: rgba(231,234,227,0.7); backdrop-filter: blur(12px) saturate(140%); -webkit-backdrop-filter: blur(12px) saturate(140%);
+      border-bottom: 1px solid rgba(17,17,17,0.06); }
+    .site-header__logo img { width: clamp(34px, 3.4vw, 42px); height: auto; display: block; transition: transform .4s cubic-bezier(.16,1,.3,1); }
+    .site-header__logo:hover img { transform: scale(1.12); }
+    .site-header__links { display: flex; align-items: center; gap: 10px; }
+    .site-header__links a { display: inline-flex; align-items: center; justify-content: center; height: 36px;
+      color: var(--ink); text-decoration: none; background: rgba(255,255,255,0.5);
+      border: 1px solid rgba(255,255,255,0.7); border-radius: 100px;
+      backdrop-filter: blur(8px); transition: background .2s ease, transform .2s ease; }
+    .site-header__links a:hover { background: #fff; transform: translateY(-1px); }
+    .hdr-icon { width: 36px; border-radius: 50%; }
+    .hdr-icon svg { width: 16px; height: 16px; }
+    .hdr-resume { gap: 6px; padding: 0 14px; font-size: 13px; font-weight: 600; }
+    .hdr-resume svg { width: 15px; height: 15px; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; }
+    .back-link:hover { color: var(--blue); }
+    .back-link svg { width: 16px; height: 16px; }
+
+    /* generic section rhythm */
+    section { padding: clamp(56px, 9vh, 110px) 0; }
+    .sec-head { display: flex; flex-direction: column; gap: 14px; margin-bottom: clamp(28px, 4vw, 48px); max-width: 60ch; }
+
+    /* scroll reveal */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(.16,1,.3,1), transform 0.7s cubic-bezier(.16,1,.3,1); }
+    .reveal.is-visible { opacity: 1; transform: none; }
+
+    /* accordion (What I learned) */
+    .acc { display: flex; flex-direction: column; gap: 10px; }
+    .acc-item { border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+      background: rgba(255,255,255,0.45); backdrop-filter: blur(12px) saturate(140%); -webkit-backdrop-filter: blur(12px) saturate(140%);
+      transition: border-color 0.3s ease; }
+    .acc-item.is-open { border-color: rgba(26,26,201,0.35); }
+    .acc-trigger { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      padding: 16px clamp(16px, 2vw, 22px); background: transparent; border: 0; cursor: pointer; font: inherit; text-align: left;
+      font-weight: 600; font-size: clamp(15px, 1.5vw, 17px); color: var(--ink); }
+    .acc-trigger svg { width: 18px; height: 18px; flex: none; color: var(--muted); transition: transform 0.25s ease; }
+    .acc-item.is-open .acc-trigger svg { transform: rotate(180deg); color: var(--blue); }
+    .acc-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.28s ease; }
+    .acc-item.is-open .acc-panel { grid-template-rows: 1fr; }
+    .acc-panel__inner { overflow: hidden; }
+    .acc-panel p { padding: 0 clamp(16px, 2vw, 22px) 18px; color: var(--muted); font-size: 14.5px; line-height: 1.6; max-width: 70ch; }
+
+    /* placeholders so empty sections read as a skeleton */
+    .ph { background: rgba(17,17,17,0.035); border: 1px dashed rgba(17,17,17,0.18); border-radius: 16px;
+      display: grid; place-items: center; color: rgba(17,17,17,0.32);
+      font-family: 'Inter', sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; }
+    .ph--16x9 { aspect-ratio: 16 / 9; }
+    .ph--4x3 { aspect-ratio: 4 / 3; }
+    .feat__video { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 16px;
+      background: #000; border: 1.5px solid rgba(255,255,255,0.92);
+      box-shadow: 0 20px 44px -20px rgba(17,17,17,0.28), 0 2px 8px rgba(17,17,17,0.05),
+        inset 0 0 0 1px rgba(255,255,255,0.35); }
+    .ph--sq { aspect-ratio: 1 / 1; }
+    .ph--tall { aspect-ratio: 3 / 4; }
+    .ph--text { min-height: 120px; }
+
+    .card { position: relative; background: rgba(255,255,255,0.45); border: 1px solid rgba(255,255,255,0.7); border-radius: 16px;
+      padding: clamp(20px, 2.4vw, 28px); backdrop-filter: blur(12px) saturate(140%); -webkit-backdrop-filter: blur(12px) saturate(140%);
+      box-shadow: 0 10px 30px -16px rgba(17,17,17,0.18); transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease; }
+    .card::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+      opacity: var(--spot-o, 0); transition: opacity 0.5s ease;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(26,26,201,0.22), transparent 70%); }
+    .card > * { position: relative; z-index: 1; }
+    .card:hover { border-color: rgba(26,26,201,0.35); box-shadow: 0 18px 40px -18px rgba(26,26,201,0.28); transform: translateY(-2px); }
+    .grid { display: grid; gap: clamp(16px, 2vw, 24px); }
+    .g-2 { grid-template-columns: repeat(2, 1fr); }
+    .g-3 { grid-template-columns: repeat(3, 1fr); }
+    .g-4 { grid-template-columns: repeat(4, 1fr); }
+
+    /* ===== hero ===== */
+    .cs-hero { padding-top: clamp(120px, 18vh, 180px); }
+    .cs-hero__meta { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; color: var(--muted); font-size: 13px; }
+    .cs-hero__meta .dot { opacity: 0.4; }
+    .cs-hero__title { font-size: clamp(52px, 11vw, 132px); color: var(--blue); margin: 20px 0 16px; }
+    .cs-hero__tagline { font-size: clamp(18px, 2.2vw, 26px); line-height: 1.4; color: var(--ink); max-width: 32ch; }
+    .cs-hero__cover { margin-top: clamp(36px, 6vw, 64px); }
+    .cover-img { display: block; width: 100%; height: auto; border-radius: 16px;
+      border: 1px solid var(--line); box-shadow: 0 24px 60px -24px rgba(0,0,0,0.35); background: #0e0f0d; }
+    .ba { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 16px; overflow: hidden;
+      border: 1px solid var(--line); box-shadow: 0 24px 60px -24px rgba(0,0,0,0.35); background: #0e0f0d;
+      user-select: none; -webkit-user-select: none; touch-action: none; cursor: ew-resize; }
+    .ba__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: left center; display: block; }
+    .ba__before { position: absolute; inset: 0; overflow: hidden; clip-path: inset(0 calc(100% - var(--p)) 0 0);
+      background: rgba(255,255,255,0.04); }
+    .ba__placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 0 24px; color: rgba(255,255,255,0.55); font-size: 13px; }
+    .ba__handle { position: absolute; top: 0; bottom: 0; left: var(--p); width: 2px; background: #fff; transform: translateX(-1px);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.08); }
+    .ba__knob { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 44px; height: 44px;
+      border-radius: 50%; background: #fff; color: #2e2e2e; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.28); transition: transform 0.18s ease; }
+    .ba__knob svg { width: 22px; height: 22px; }
+    .ba.is-drag .ba__knob { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 6px 22px rgba(0,0,0,0.35); }
+    .ba__tag { position: absolute; bottom: 14px; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #fff; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); padding: 5px 11px; border-radius: 100px;
+      pointer-events: none; }
+    .ba__tag--before { left: 14px; }
+    .ba__tag--after { right: 14px; }
+    .cs-facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: clamp(28px, 4vw, 44px);
+      background: var(--line); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+    .cs-fact { background: var(--bg); padding: 18px 20px; }
+    .cs-fact span { display: block; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .cs-fact strong { font-size: 15px; font-weight: 600; color: var(--ink); }
+
+    /* goals / process / metrics */
+    .num { font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'opsz' 144, 'wght' 600;
+      font-size: clamp(40px, 6vw, 72px); color: var(--blue); line-height: 1; }
+    .step__k { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); }
+    .step h3 { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 1.4rem; margin: 10px 0 8px; }
+    .step p { color: var(--muted); font-size: 14px; line-height: 1.55; }
+    /* grid-feature-cards — dashed-divider grid with masked grid-pattern per card */
+    .dd-grid { display: grid; grid-template-columns: repeat(2, 1fr); border: 1px dashed var(--line);
+      border-radius: 16px; overflow: hidden; background: rgba(255,255,255,0.42);
+      backdrop-filter: blur(10px) saturate(140%); -webkit-backdrop-filter: blur(10px) saturate(140%); }
+    .dd-card { position: relative; overflow: hidden; padding: clamp(22px, 2.4vw, 30px);
+      border-right: 1px dashed var(--line); border-bottom: 1px dashed var(--line); }
+    .dd-card__icon { position: relative; z-index: 2; width: 26px; height: 26px; color: rgba(17,17,17,0.72); }
+    .dd-card .step__k { position: relative; z-index: 2; display: block; margin-top: 26px; }
+    .dd-card h3 { margin: 6px 0 8px; }
+    .dd-card p { position: relative; z-index: 2; }
+    .dd-card__pattern { pointer-events: none; position: absolute; inset: 0; color: var(--blue); transform: translateY(-16px);
+      -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.55) 38%, transparent 72%);
+      mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.55) 38%, transparent 72%); }
+    .dd-card__pattern svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .dd-card__pattern path { fill: none; stroke: rgba(26,26,201,0.16); }
+    .dd-card__pattern .dd-sq { fill: rgba(26,26,201,0.08); stroke: 0; }
+    @media (max-width: 560px) { .dd-grid { grid-template-columns: 1fr; } }
+    .dd-reveal { opacity: 0; filter: blur(4px); transform: translateY(-8px);
+      transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease; }
+    .dd-reveal:nth-child(2) { transition-delay: 0.1s; }
+    .dd-reveal:nth-child(3) { transition-delay: 0.2s; }
+    .dd-reveal:nth-child(4) { transition-delay: 0.3s; }
+    .dd-reveal.is-in { opacity: 1; filter: blur(0); transform: none; }
+    @media (prefers-reduced-motion: reduce) { .dd-reveal { opacity: 1; filter: none; transform: none; transition: none; } }
+    .feat__title { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 1.3rem; margin: 16px 0 6px; }
+    .feat__line { color: var(--muted); font-size: 14px; line-height: 1.55; }
+    .feat__line b { color: var(--ink); font-weight: 600; }
+    .feat__line + .feat__line { margin-top: 8px; }
+
+    /* animated tabs (Features) */
+    .tabs { width: 100%; }
+    .tabs__bar { position: relative; display: flex; flex-wrap: wrap; width: 100%; gap: 4px; padding: 5px; border-radius: 14px;
+      background: rgba(255,255,255,0.45); border: 1px solid rgba(255,255,255,0.7);
+      backdrop-filter: blur(12px) saturate(140%); -webkit-backdrop-filter: blur(12px) saturate(140%); }
+    .tabs__pill { position: absolute; top: 5px; left: 5px; width: 0; height: 0; border-radius: 10px; z-index: 0;
+      background: var(--blue); box-shadow: 0 6px 18px -6px rgba(26,26,201,0.5);
+      transition: left 0.45s cubic-bezier(.16,1,.3,1), top 0.45s cubic-bezier(.16,1,.3,1), width 0.45s cubic-bezier(.16,1,.3,1), height 0.45s cubic-bezier(.16,1,.3,1); }
+    .tabs__btn { position: relative; z-index: 1; flex: 1 1 auto; text-align: center; white-space: nowrap; border: 0; background: transparent; cursor: pointer; font: inherit;
+      font-size: 14px; font-weight: 600; color: var(--muted); padding: 9px 16px; border-radius: 10px; transition: color 0.3s ease; }
+    .tabs__btn.is-active { color: #fff; }
+    .tabs__panel { margin-top: 10px; padding: clamp(18px, 2.4vw, 30px); border-radius: 16px; min-height: 260px;
+      background: rgba(255,255,255,0.45); border: 1px solid rgba(255,255,255,0.7);
+      backdrop-filter: blur(12px) saturate(140%); -webkit-backdrop-filter: blur(12px) saturate(140%);
+      box-shadow: 0 10px 30px -16px rgba(17,17,17,0.18); overflow: hidden; }
+    .tabs__content { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(18px, 2.5vw, 32px); align-items: center;
+      animation: tabIn 0.5s cubic-bezier(.16,1,.3,1); }
+    .tabs__content[hidden] { display: none; }
+    .tabs__content .ph { width: 100%; }
+    .tabs__body .feat__title { margin-top: 0; }
+    @keyframes tabIn { from { opacity: 0; transform: translateX(-10px) scale(0.98); filter: blur(8px); }
+      to { opacity: 1; transform: none; filter: blur(0); } }
+    @media (max-width: 600px) { .tabs__content { grid-template-columns: 1fr; } }
+    @media (prefers-reduced-motion: reduce) { .tabs__content { animation: none; } .tabs__pill { transition: none; } }
+
+    /* design system tiles */
+    .sys-tile { display: flex; flex-direction: column; gap: 14px; text-align: left; cursor: pointer; font: inherit; color: inherit; }
+    .sys-tile__foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
+    .sys-tile__label { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 1.15rem; color: var(--ink); }
+    .sys-tile__meta { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+    .sys-tile__exp { width: 18px; height: 18px; color: var(--muted); flex: none; transition: color 0.2s ease, transform 0.2s ease; }
+    .sys-tile:hover .sys-tile__exp { color: var(--blue); transform: translate(2px, -2px); }
+    /* features-8 style bento — one 6-column grid with mixed-size cards */
+    .sys-bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: clamp(14px, 1.8vw, 20px); align-items: start; }
+    .sys-tile--w2 { grid-column: span 2; }
+    .sys-tile--w3 { grid-column: span 3; }
+    .sys-tile--w4 { grid-column: span 4; }
+    .sys-tile--lg .sys-prev { height: clamp(132px, 16vw, 184px); }
+    @media (max-width: 900px) {
+      .sys-bento { grid-template-columns: repeat(2, 1fr); }
+      .sys-tile--w2, .sys-tile--w3, .sys-tile--w4 { grid-column: span 1; }
+      .sys-tile--lg { grid-column: span 2; }
+    }
+    @media (max-width: 560px) {
+      .sys-bento { grid-template-columns: 1fr; }
+      .sys-tile--lg, .sys-tile--w2, .sys-tile--w3, .sys-tile--w4 { grid-column: span 1; }
+    }
+    /* ClipPathLinks — directional wipe reveal on the system tiles */
+    .clip-fill { position: absolute; inset: 0; z-index: 2; border-radius: inherit; pointer-events: none;
+      display: grid; place-content: center; justify-items: center; gap: 10px; text-align: center; padding: 16px;
+      background: var(--blue); color: #fff; clip-path: polygon(0 0, 100% 0, 0 0, 0% 100%); }
+    .clip-fill__label { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 1.25rem; }
+    .clip-fill__hint { display: inline-flex; align-items: center; gap: 6px; font-family: 'Inter', sans-serif;
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.85; }
+    .clip-fill__hint svg { width: 13px; height: 13px; }
+    @media (prefers-reduced-motion: reduce) { .clip-fill { transition: none !important; } }
+    .sys-prev { height: 96px; border-radius: 10px; overflow: hidden; display: flex; }
+    .sys-prev--color span { flex: 1; }
+    .sys-prev--type { background: #fff; align-items: center; gap: 12px; padding: 0 14px; border: 1px solid var(--line); }
+    .sys-ag { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 2.6rem; line-height: 1; color: var(--ink); }
+    .sys-type-lines { display: flex; flex-direction: column; gap: 7px; flex: 1; }
+    .sys-type-lines i { height: 7px; border-radius: 100px; background: rgba(17,17,17,0.16); display: block; }
+    .sys-prev--grid { background: #fff; align-items: stretch; gap: 7px; padding: 12px; border: 1px solid var(--line); }
+    .sys-prev--grid i { flex: 1; background: rgba(26,26,201,0.16); border-radius: 3px; }
+    .sys-prev--radius { background: #fff; align-items: center; justify-content: space-around; padding: 0 14px; border: 1px solid var(--line); }
+    .sys-prev--radius i { width: 38px; height: 38px; background: rgba(26,26,201,0.16); border: 1.5px solid var(--blue); display: block; }
+    .sys-subhead { margin: clamp(36px, 5vw, 56px) 0 18px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue); }
+    .sys-components { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+    .sys-prev--mini { background: #fff; border: 1px solid var(--line); align-items: center; justify-content: center;
+      gap: 8px; flex-wrap: wrap; padding: 0 12px; }
+    .schip { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 100px; }
+    .schip--ok { color: #137a4b; background: #d8f3e4; }
+    .schip--warn { color: #9a6a00; background: #fdeecb; }
+    .schip--bad { color: #b42318; background: #fcdcd8; }
+    .sbtn { font-size: 12.5px; font-weight: 600; padding: 8px 16px; border-radius: 8px; }
+    .sbtn--primary { color: #fff; background: var(--blue); }
+    .sbtn--ghost { color: var(--blue); background: transparent; border: 1px solid rgba(26,26,201,0.4); }
+    .sys-prev--table { background: #fff; border: 1px solid var(--line); flex-direction: column; justify-content: center; gap: 8px; padding: 14px; }
+    .sys-prev--table i { height: 8px; border-radius: 100px; background: rgba(17,17,17,0.12); display: block; }
+    .sys-prev--table i:first-child { background: rgba(26,26,201,0.18); }
+    .stab { font-size: 12.5px; font-weight: 600; color: var(--muted); padding: 6px 12px; border-radius: 8px; }
+    .stab--on { color: #fff; background: var(--blue); }
+    .sys-prev--modal { background: #eef0fb; align-items: center; justify-content: center; }
+    .smodal { width: 64%; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 12px;
+      display: flex; flex-direction: column; gap: 7px; box-shadow: 0 8px 20px -10px rgba(17,17,17,0.25); }
+    .smodal i { height: 7px; width: 100%; border-radius: 100px; background: rgba(17,17,17,0.14); }
+    .smodal b { height: 14px; width: 42%; align-self: flex-end; border-radius: 5px; background: var(--blue); margin-top: 2px; }
+
+    /* key screens gallery */
+    .shot { display: block; width: 100%; text-align: left; border: 0; padding: 0; background: transparent; cursor: pointer; font: inherit; color: inherit; }
+    .shot__media { position: relative; }
+    .shot__media img { display: block; width: 100%; height: 100%; object-fit: contain; transition: transform 0.5s cubic-bezier(.16,1,.3,1); }
+    .shot:hover .shot__media img { transform: scale(1.03); }
+    .shot__cap { display: flex; flex-direction: column; gap: 2px; padding: 14px 4px 0; }
+    .shot__name { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 1.1rem; color: var(--ink); }
+    .shot__desc { font-size: 13.5px; line-height: 1.45; color: var(--muted); }
+    .shot--hero { margin-bottom: clamp(20px, 3vw, 32px); }
+    .shot--hero .shot__media img { aspect-ratio: 16 / 9; }
+    .shots { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+    .shots .shot__media img { aspect-ratio: 16 / 10; }
+    .shot--soon { cursor: default; }
+    .shot__media--soon { aspect-ratio: 16 / 10; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+      color: var(--muted); border: 1px dashed rgba(17,17,17,0.2); border-radius: 16px; background: rgba(17,17,17,0.02); }
+    .shot__media--soon svg { width: 30px; height: 30px; opacity: 0.6; }
+    .shot__media--soon span { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+    /* prototype video */
+    .desktop-mock-card { margin-top: clamp(32px, 5vw, 56px); }
+    .desktop-mock__screen { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; cursor: zoom-in; }
+
+    /* lightbox */
+    .lb { position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-start; justify-content: center;
+      padding: clamp(16px, 5vh, 64px) clamp(12px, 4vw, 48px); overflow-y: auto;
+      background: rgba(12,13,15,0.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+    .lb[hidden] { display: none; }
+    .lb__inner { width: 100%; max-width: 1000px; background: var(--surface); border-radius: 18px; padding: clamp(18px, 2.5vw, 32px); }
+    .lb__title { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 1.4rem; color: var(--ink); margin-bottom: 18px; }
+    .lb__imgs img { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--line); margin-bottom: 16px; }
+    .lb__video { display: block; width: 100%; height: auto; max-height: 80vh; border-radius: 10px; background: #000; }
+    .lb__close { position: fixed; top: 18px; right: 18px; width: 44px; height: 44px; border-radius: 50%; border: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; color: #fff; background: rgba(255,255,255,0.14);
+      backdrop-filter: blur(6px); transition: background 0.2s ease; }
+    .lb__close:hover { background: rgba(255,255,255,0.28); }
+    .lb__close svg { width: 20px; height: 20px; }
+
+    /* footer */
+    .cs-footer { background: var(--ink); color: #f3f3ee; text-align: center; position: relative; overflow: hidden; }
+    .cs-footer .neuro-bg { position: absolute; inset: 0; z-index: 0; display: block; }
+    .cs-footer::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background: linear-gradient(rgba(20,22,17,0.32), rgba(20,22,17,0.46)); }
+    .cs-footer > section { position: relative; z-index: 1; }
+    .cs-footer .display { color: #fff; font-size: clamp(30px, 5vw, 60px); line-height: 1.05; }
+    .cs-footer__hl { color: #9aa6ff; }
+    .cs-footer__row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 22px;
+      font-size: 14px; color: rgba(255,255,255,0.75); }
+    .cs-footer__row a { color: rgba(255,255,255,0.85); text-decoration: none; }
+    .cs-footer__row a:hover { color: #fff; }
+
+    @media (max-width: 860px) {
+      .g-2, .g-3, .g-4 { grid-template-columns: 1fr; }
+      .cs-facts { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 520px) {
+      .cs-facts { grid-template-columns: 1fr; }
+      .site-header__links { gap: 8px; }
+    }
+
+    /* dynamic-island table of contents */
+    .toc { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 90; }
+    .toc__backdrop { position: fixed; inset: 0; z-index: -1; background: rgba(17,17,17,0.18);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+    .toc.is-open .toc__backdrop { opacity: 1; pointer-events: auto; }
+    .toc__island { position: relative; width: min(280px, 90vw); height: 52px; border-radius: 26px; overflow: hidden; cursor: pointer;
+      background: rgba(255,255,255,0.97); border: 1px solid rgba(17,17,17,0.10);
+      box-shadow: 0 16px 40px -16px rgba(17,17,17,0.35);
+      transition: width 0.5s cubic-bezier(.22,1,.36,1), height 0.5s cubic-bezier(.22,1,.36,1), border-radius 0.5s cubic-bezier(.22,1,.36,1); }
+    .toc.is-open .toc__island { width: min(360px, 92vw); height: min(420px, 70vh); border-radius: 24px; cursor: default; }
+    .toc__pill { position: absolute; inset: 0; display: flex; align-items: center; gap: 14px; padding: 0 18px;
+      transition: opacity 0.4s ease, filter 0.4s ease; }
+    .toc.is-open .toc__pill { opacity: 0; filter: blur(4px); pointer-events: none; }
+    .toc__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); flex: none; }
+    .toc__label { flex: 1; min-width: 0; font-size: 14px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .toc__ring { flex: none; transform: rotate(-90deg); }
+    .toc__ring-bg { fill: none; stroke: var(--line); stroke-width: 2.5; }
+    .toc__ring-fg { fill: none; stroke: var(--blue); stroke-width: 2.5; stroke-linecap: round; transition: stroke-dashoffset 0.15s ease; }
+    .toc__panel { position: absolute; inset: 0; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.4s ease 0.1s; }
+    .toc.is-open .toc__panel { opacity: 1; pointer-events: auto; }
+    .toc__head { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px 10px; flex: none; }
+    .toc__head span { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .toc__close { border: 0; background: transparent; color: var(--muted); cursor: pointer; display: flex; padding: 2px; }
+    .toc__close:hover { color: var(--ink); }
+    .toc__close svg { width: 18px; height: 18px; }
+    .toc__list { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 0 10px 14px; display: flex; flex-direction: column; gap: 2px; }
+    .toc__item { display: flex; align-items: center; gap: 10px; width: 100%; border: 0; background: transparent; cursor: pointer;
+      text-align: left; font: inherit; font-size: 14px; color: rgba(17,17,17,0.5); padding: 9px 12px; border-radius: 10px;
+      transition: background 0.25s ease, color 0.25s ease; }
+    .toc__item:hover { background: rgba(17,17,17,0.05); color: var(--ink); }
+    .toc__item.is-active { background: rgba(26,26,201,0.10); color: var(--blue); font-weight: 600; }
+    .toc__item span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: transform 0.25s ease; }
+    .toc__item:hover span { transform: translateX(3px); }
+    .toc__item i { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); flex: none; opacity: 0; transition: opacity 0.25s ease; }
+    .toc__item.is-active i { opacity: 1; }
+    @media (prefers-reduced-motion: reduce) { .toc__island, .toc__pill, .toc__panel, .toc__ring-fg, .toc__item span { transition: none; } }
+  </style>
+</head>
+<body>
+
+  <!-- ===== header ===== -->
+  <header class="site-header">
+    <div style="display:flex;align-items:center;gap:18px;">
+      <a class="site-header__logo" href="index.html" aria-label="Home"><img src="media/alok-logo.svg" alt="Alok Kachhap" /></a>
+      <a class="back-link" href="work.html#projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>All work</a>
+    </div>
+    <nav class="site-header__links">
+      <a class="hdr-icon" href="https://www.linkedin.com/in/alok-kachhap-659ab2163/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.08 1.4-2.08 2.85V21H9z"/></svg>
+      </a>
+      <a class="hdr-resume" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg><span>Resume</span></a>
+    </nav>
+  </header>
+
+  <!-- ===== 1. hero ===== -->
+  <header class="cs-hero">
+    <div class="wrap">
+      <p class="cs-hero__meta">
+        <span class="eyebrow">Case Study</span>
+        <span class="dot">•</span> Influencer Marketing
+        <span class="dot">•</span> Brand Side
+      </p>
+      <h1 class="cs-hero__title display">Atisfyreach</h1>
+      <p class="cs-hero__tagline">Rebuilding a complex AI marketing platform into a clear, scalable experience brands can grow with.</p>
+
+      <div class="cs-facts">
+        <div class="cs-fact"><span>Role</span><strong>UI/UX Designer</strong></div>
+        <div class="cs-fact"><span>Timeline</span><strong>2023 to Present</strong></div>
+        <div class="cs-fact"><span>Platform</span><strong>Web</strong></div>
+        <div class="cs-fact"><span>Company</span><strong>Atisfy</strong></div>
+      </div>
+
+      <div class="cs-hero__cover">
+        <video class="cover-img" src="media/atisfyreach-hero-v3.mp4" muted playsinline preload="auto"></video>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ===== 2. overview ===== -->
+  <section id="overview">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">01 Overview</span><h2 class="sec-title">What is Atisfyreach?</h2></div>
+      <div class="grid g-2">
+        <p class="lead"><b>Atisfyreach matchmakes brands and influencers with AI.</b> It’s the brand-side platform of Atisfy, an end-to-end, automated influencer marketing solution that uses data and AI to connect brands with authentic content creators who truly align to their identity, and to plan, launch, and coordinate cross-platform, multi-country campaigns in a single flow.</p>
+        <ul class="points">
+          <li>AI-powered matchmaking between brands &amp; influencers</li>
+          <li>Authentic creators aligned to your brand identity</li>
+          <li>Scalable, end-to-end campaign automation</li>
+          <li>Cross-platform, multi-country campaigns in one go</li>
+          <li>Data-driven decisions at every step</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 3. the challenge ===== -->
+  <section id="challenge">
+    <div class="wrap">
+      <div class="sec-head" style="max-width: none;"><span class="eyebrow">02 The Challenge</span><h2 class="sec-title">The problem we set out to solve</h2></div>
+      <div class="grid g-2" style="align-items: start; margin-top: clamp(8px, 1.5vw, 16px);">
+        <div>
+          <p class="lead">The original Atisfyreach was capable, but it asked too much of its users. As the platform grew, its structure, hierarchy, and visual language hadn’t kept pace, leaving brands to work harder than they should to run their campaigns.</p>
+          <p class="lead" style="margin-top: clamp(18px, 2.5vw, 28px);">Beyond fixing these fundamentals, the revamp was also a chance to introduce new capabilities like budget-based performance prediction and a guided campaign-creation flow.</p>
+        </div>
+        <ul class="points">
+          <li><b>Broken user flow.</b> Complex tasks like campaign and promo creation were crammed into long, single-page forms with no clear sense of progress or priority.</li>
+          <li><b>Weak visual hierarchy.</b> Heavy dark headers and uniformly dense panels made everything compete for attention, so nothing guided the eye to what mattered.</li>
+          <li><b>Dated, inconsistent visual design.</b> Clashing colours and styling, with components that looked and behaved differently from screen to screen.</li>
+          <li><b>Hard-to-read data.</b> Key metrics like impact, reach, budget, and cost lived in cramped tables and gauges that were difficult to scan, compare, or act on.</li>
+          <li><b>A UI that couldn’t explain itself.</b> Nearly every field leaned on a “?” tooltip to make sense, signalling deeper clarity problems.</li>
+        </ul>
+      </div>
+
+      <div class="ba" style="--p:50%; margin-top: clamp(28px, 4vw, 44px);">
+        <img class="ba__img" src="media/atisfyreach-cover.png?v=3" alt="After — redesigned Atisfyreach dashboard" draggable="false" />
+        <div class="ba__before">
+          <img class="ba__img" src="media/atisfyreach-before.png?v=3" alt="Before — original Atisfyreach dashboard" draggable="false" onerror="this.style.display='none'" />
+        </div>
+        <div class="ba__handle">
+          <div class="ba__knob">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/><path d="m9 6 6 6-6 6"/></svg>
+          </div>
+        </div>
+        <span class="ba__tag ba__tag--before">Before</span>
+        <span class="ba__tag ba__tag--after">After</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 4. goals ===== -->
+  <section id="goals">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">03 Goals</span><h2 class="sec-title">What success looked like</h2></div>
+      <div class="grid g-3">
+        <div class="card">
+          <div class="num">01</div>
+          <h3 class="feat__title">Make the complex feel effortless</h3>
+          <p class="feat__line">Rebuild the core flows (campaign and promo creation) into clear, guided, step-by-step journeys, so brands always know where they are, what’s next, and what matters most.</p>
+        </div>
+        <div class="card">
+          <div class="num">02</div>
+          <h3 class="feat__title">Bring clarity through a design system</h3>
+          <p class="feat__line">Replace the heavy, clashing UI with a calm, modern visual language and a unified component library, with consistent hierarchy and styling so the interface explains itself.</p>
+        </div>
+        <div class="card">
+          <div class="num">03</div>
+          <h3 class="feat__title">Turn data into decisions</h3>
+          <p class="feat__line">Restructure dense tables into scannable layouts and introduce predictive tools like budget-based performance prediction, so brands don’t just see numbers, they act on them.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 5. process (double diamond) ===== -->
+  <section id="process">
+    <div class="wrap">
+      <div class="sec-head" style="max-width: none;"><span class="eyebrow">04 Process</span><h2 class="sec-title">My approach to the Double Diamond</h2></div>
+      <div class="dd-grid">
+        <div class="step dd-card dd-reveal">
+          <span class="dd-card__pattern" aria-hidden="true"><svg><defs><pattern id="ddp1" width="20" height="20" patternUnits="userSpaceOnUse" x="-12" y="4"><path d="M.5 20V.5H20"/></pattern></defs><rect width="100%" height="100%" stroke-width="0" fill="url(#ddp1)"/><svg x="-12" y="4" class="dd-sq"><rect width="21" height="21" x="140" y="20"/><rect width="21" height="21" x="160" y="60"/><rect width="21" height="21" x="180" y="100"/><rect width="21" height="21" x="140" y="80"/><rect width="21" height="21" x="200" y="40"/></svg></svg></span>
+          <svg class="dd-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <span class="step__k">Discover</span><h3>Understand</h3><p>Audited the existing product end to end, mapped every flow, and gathered input from brands and internal stakeholders to surface where the experience broke down.</p>
+        </div>
+        <div class="step dd-card dd-reveal">
+          <span class="dd-card__pattern" aria-hidden="true"><svg><defs><pattern id="ddp2" width="20" height="20" patternUnits="userSpaceOnUse" x="-12" y="4"><path d="M.5 20V.5H20"/></pattern></defs><rect width="100%" height="100%" stroke-width="0" fill="url(#ddp2)"/><svg x="-12" y="4" class="dd-sq"><rect width="21" height="21" x="160" y="40"/><rect width="21" height="21" x="180" y="80"/><rect width="21" height="21" x="140" y="120"/><rect width="21" height="21" x="200" y="60"/><rect width="21" height="21" x="160" y="100"/></svg></svg></span>
+          <svg class="dd-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          <span class="step__k">Define</span><h3>Frame</h3><p>Synthesised findings into clear problem statements, reworked the information architecture, and prioritised the flows that mattered most, starting with campaign and promo creation.</p>
+        </div>
+        <div class="step dd-card dd-reveal">
+          <span class="dd-card__pattern" aria-hidden="true"><svg><defs><pattern id="ddp3" width="20" height="20" patternUnits="userSpaceOnUse" x="-12" y="4"><path d="M.5 20V.5H20"/></pattern></defs><rect width="100%" height="100%" stroke-width="0" fill="url(#ddp3)"/><svg x="-12" y="4" class="dd-sq"><rect width="21" height="21" x="180" y="20"/><rect width="21" height="21" x="140" y="60"/><rect width="21" height="21" x="200" y="100"/><rect width="21" height="21" x="160" y="80"/><rect width="21" height="21" x="180" y="120"/></svg></svg></span>
+          <svg class="dd-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg>
+          <span class="step__k">Design</span><h3>Build</h3><p>Created a scalable design system, then moved from wireframes to high-fidelity prototypes, establishing consistent hierarchy, components, and data patterns across the platform.</p>
+        </div>
+        <div class="step dd-card dd-reveal">
+          <span class="dd-card__pattern" aria-hidden="true"><svg><defs><pattern id="ddp4" width="20" height="20" patternUnits="userSpaceOnUse" x="-12" y="4"><path d="M.5 20V.5H20"/></pattern></defs><rect width="100%" height="100%" stroke-width="0" fill="url(#ddp4)"/><svg x="-12" y="4" class="dd-sq"><rect width="21" height="21" x="140" y="40"/><rect width="21" height="21" x="200" y="20"/><rect width="21" height="21" x="160" y="120"/><rect width="21" height="21" x="180" y="60"/><rect width="21" height="21" x="140" y="100"/></svg></svg></span>
+          <svg class="dd-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+          <span class="step__k">Deliver</span><h3>Ship</h3><p>Partnered with engineering on handoff and QA, validated against the original pain points, and shipped iteratively, including new capabilities like budget-based performance prediction.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 6. research & insights ===== -->
+  <section id="research">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">05 Research</span><h2 class="sec-title">Research &amp; insights</h2></div>
+      <p class="lead" style="margin-bottom: clamp(24px, 3.5vw, 40px);">I combined a full UX audit of the existing platform with stakeholder interviews, brand-user feedback, and support and usage data to understand where the experience was failing, and why.</p>
+      <div class="grid g-3">
+        <div class="card">
+          <div class="num">01</div>
+          <h3 class="feat__title">Brands got lost in long flows</h3>
+          <p class="feat__line">Campaign and promo setup spanned one endless page; users couldn’t tell how far along they were or what was required next. This pointed to a guided, chunked flow with clear progress.</p>
+        </div>
+        <div class="card">
+          <div class="num">02</div>
+          <h3 class="feat__title">The UI couldn’t explain itself</h3>
+          <p class="feat__line">Nearly every field relied on a “?” tooltip, so people leaned on support instead of the interface. Clarity had to be built into hierarchy, labels, and defaults, not bolted on.</p>
+        </div>
+        <div class="card">
+          <div class="num">03</div>
+          <h3 class="feat__title">Data was visible but not usable</h3>
+          <p class="feat__line">Key metrics existed but lived in dense tables and gauges, so brands struggled to judge performance or budget. The fix was to restructure data for scanning and add predictive guidance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 7. design system ===== -->
+  <section id="system">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">06 Design System</span><h2 class="sec-title">A system to scale on</h2></div>
+      <p class="lead" style="margin-bottom: clamp(24px, 3.5vw, 40px);">To fix consistency at the root, I built a design system: shared foundations and reusable components that keep every screen coherent and let the product scale without redesigning from scratch.</p>
+
+      <div class="grid sys-bento">
+        <button class="card sys-tile sys-tile--w4 sys-tile--lg" data-title="Colour tokens" data-gallery="media/system/colors/Colors.png,media/system/colors/Colors-1.png,media/system/colors/Colors-2.png,media/system/colors/Colors-3.png,media/system/colors/Colors-4.png,media/system/colors/Colors-5.png,media/system/colors/Colors-6.png,media/system/colors/Colors-7.png">
+          <div class="sys-prev sys-prev--color">
+            <span style="background:#1b2a8a"></span><span style="background:#1d34b5"></span><span style="background:#2f5bff"></span><span style="background:#d7ddfb"></span><span style="background:#e9ecfc"></span>
+          </div>
+          <div class="sys-tile__foot"><div><div class="sys-tile__label">Colour</div><div class="sys-tile__meta">Tokens &amp; shades</div></div><svg class="sys-tile__exp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        </button>
+
+        <button class="card sys-tile sys-tile--w2 sys-tile--lg" data-title="Typography scale" data-gallery="media/system/typography/Typography.png,media/system/typography/Typography-1.png,media/system/typography/Typography-2.png,media/system/typography/Typography-3.png,media/system/typography/Typography-4.png,media/system/typography/Typography-5.png,media/system/typography/Typography-6.png,media/system/typography/Typography-7.png,media/system/typography/Typography-8.png,media/system/typography/Typography-9.png,media/system/typography/Typography-10.png,media/system/typography/Typography-11.png,media/system/typography/Typography-12.png,media/system/typography/Typography-13.png,media/system/typography/Typography-14.png,media/system/typography/Typography-15.png,media/system/typography/Typography-16.png,media/system/typography/Typography-17.png,media/system/typography/Typography-18.png">
+          <div class="sys-prev sys-prev--type">
+            <span class="sys-ag">Ag</span>
+            <span class="sys-type-lines"><i style="width:90%"></i><i style="width:70%"></i><i style="width:80%"></i></span>
+          </div>
+          <div class="sys-tile__foot"><div><div class="sys-tile__label">Typography</div><div class="sys-tile__meta">Type scale</div></div><svg class="sys-tile__exp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        </button>
+
+        <button class="card sys-tile sys-tile--w2" data-title="Grid system" data-gallery="media/system/grid/Content.png,media/system/grid/Content-1.png">
+          <div class="sys-prev sys-prev--grid">
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="sys-tile__foot"><div><div class="sys-tile__label">Grid</div><div class="sys-tile__meta">Columns &amp; spacing</div></div><svg class="sys-tile__exp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        </button>
+
+        <button class="card sys-tile sys-tile--w2" data-title="Corner radius" data-gallery="media/system/radius/Radius.png">
+          <div class="sys-prev sys-prev--radius">
+            <i style="border-radius:3px"></i><i style="border-radius:7px"></i><i style="border-radius:12px"></i><i style="border-radius:50%"></i>
+          </div>
+          <div class="sys-tile__foot"><div><div class="sys-tile__label">Radius</div><div class="sys-tile__meta">Corner scale</div></div><svg class="sys-tile__exp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        </button>
+
+        <button class="card sys-tile sys-tile--w2" data-title="Badges &amp; status chips" data-gallery="media/system/badge/image.png,media/system/badge/image-1.png,media/system/badge/image-2.png,media/system/badge/image-3.png,media/system/badge/image-4.png">
+          <div class="sys-prev sys-prev--mini">
+            <span class="schip schip--ok">Active</span><span class="schip schip--warn">Pending</span><span class="schip schip--bad">Rejected</span>
+          </div>
+          <div class="sys-tile__foot"><div><div class="sys-tile__label">Badges</div><div class="sys-tile__meta">Status chips</div></div><svg class="sys-tile__exp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        </button>
+
+        <button class="card sys-tile sys-tile--w2" data-title="Buttons" data-gallery="media/system/button/image.png,media/system/button/image-1.png,media/system/button/image-2.png,media/system/button/Browser.png">
+          <div class="sys-prev sys-prev--mini">
+            <span class="sbtn sbtn--primary">Button</span><span class="sbtn sbtn--ghost">Button</span>
+          </div>
+          <div class="sys-tile__foot"><div><div class="sys-tile__label">Buttons</div><div class="sys-tile__meta">Variants &amp; states</div></div><svg class="sys-tile__exp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        </button>
+
+        <button class="card sys-tile sys-tile--w2" data-title="Tables" data-gallery="media/system/table/image.png,media/system/table/image-1.png,media/system/table/image-2.png,media/system/table/image-3.png,media/system/table/image-4.png,media/system/table/image-5.png,media/system/table/Light.png">
+          <div class="sys-prev sys-prev--table">
+            <i style="width:100%"></i><i style="width:85%"></i><i style="width:92%"></i><i style="width:78%"></i>
+          </div>
+          <div class="sys-tile__foot"><div><div class="sys-tile__label">Tables</div><div class="sys-tile__meta">Data &amp; rows</div></div><svg class="sys-tile__exp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        </button>
+
+        <button class="card sys-tile sys-tile--w2" data-title="Modals" data-gallery="media/system/modal/image.png,media/system/modal/image-1.png,media/system/modal/image-2.png,media/system/modal/Status-Modals-1.1.png">
+          <div class="sys-prev sys-prev--modal">
+            <span class="smodal"><i></i><i style="width:60%"></i><b></b></span>
+          </div>
+          <div class="sys-tile__foot"><div><div class="sys-tile__label">Modals</div><div class="sys-tile__meta">Dialogs &amp; status</div></div><svg class="sys-tile__exp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 8. key screens ===== -->
+  <section id="screens">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">07 The Solution</span><h2 class="sec-title">Key screens &amp; flows</h2></div>
+
+      <button class="shot shot--hero" data-title="Dashboard" data-gallery="media/mockups/dashboard.png">
+        <div class="shot__media"><img src="media/mockups/dashboard.png" loading="lazy" alt="Redesigned Atisfyreach dashboard" /></div>
+        <div class="shot__cap"><span class="shot__name">Dashboard</span><span class="shot__desc">Campaigns, reach, and what needs action — all at a glance.</span></div>
+      </button>
+
+      <div class="grid shots">
+        <button class="shot" data-title="First-time dashboard" data-gallery="media/mockups/dashboard-first-time.png">
+          <div class="shot__media"><img src="media/mockups/dashboard-first-time.png" loading="lazy" alt="First-time user dashboard" /></div>
+          <div class="shot__cap"><span class="shot__name">First-time dashboard</span><span class="shot__desc">An onboarding state that guides brand-new accounts.</span></div>
+        </button>
+        <button class="shot" data-title="Campaign list" data-gallery="media/mockups/campaign-list.png">
+          <div class="shot__media"><img src="media/mockups/campaign-list.png" loading="lazy" alt="Campaign list view" /></div>
+          <div class="shot__cap"><span class="shot__name">Campaign list</span><span class="shot__desc">Every campaign with status, type, budget, and dates.</span></div>
+        </button>
+        <button class="shot" data-title="Content review" data-gallery="media/mockups/content-review.png">
+          <div class="shot__media"><img src="media/mockups/content-review.png" loading="lazy" alt="Content review screen" /></div>
+          <div class="shot__cap"><span class="shot__name">Content review</span><span class="shot__desc">Approve or request changes before content goes live.</span></div>
+        </button>
+        <button class="shot" data-title="Published content" data-gallery="media/mockups/published-content.png">
+          <div class="shot__media"><img src="media/mockups/published-content.png" loading="lazy" alt="Published content review" /></div>
+          <div class="shot__cap"><span class="shot__name">Published content</span><span class="shot__desc">Review live content for ongoing compliance.</span></div>
+        </button>
+        <button class="shot" data-title="Payment" data-gallery="media/mockups/payment.png">
+          <div class="shot__media"><img src="media/mockups/payment.png" loading="lazy" alt="Payment screen" /></div>
+          <div class="shot__cap"><span class="shot__name">Payment</span><span class="shot__desc">Invoice and payment status, tracked end to end.</span></div>
+        </button>
+        <button class="shot" data-title="Profile" data-gallery="media/mockups/profile.png">
+          <div class="shot__media"><img src="media/mockups/profile.png" loading="lazy" alt="Profile and workspace" /></div>
+          <div class="shot__cap"><span class="shot__name">Profile</span><span class="shot__desc">Company profile and workspace settings.</span></div>
+        </button>
+      </div>
+
+      <div class="desktop-mock-card">
+        <video class="desktop-mock__screen" src="media/mockups/campaign-flow-mute.mp4" muted playsinline preload="metadata"></video>
+        <div class="shot__cap" style="padding-top:16px;"><span class="shot__name">Campaign creation flow</span><span class="shot__desc">A walkthrough of the guided, step-by-step flow that replaced the old single-page setup.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 9. features ===== -->
+  <section id="features">
+    <div class="wrap">
+      <div class="sec-head" style="max-width: none;"><span class="eyebrow">08 Building on the system</span><h2 class="sec-title">Features shipped on the new foundation</h2></div>
+      <div class="tabs" data-tabs>
+        <div class="tabs__bar">
+          <span class="tabs__pill"></span>
+          <button class="tabs__btn is-active" data-tab="t1">Content Review</button>
+          <button class="tabs__btn" data-tab="t2">Estimated Performance</button>
+          <button class="tabs__btn" data-tab="t3">Cross-Posting</button>
+        </div>
+        <div class="tabs__panel">
+          <div class="tabs__content" data-panel="t1">
+            <video class="feat__video" src="media/Features%20shipped%20on%20the%20new%20foundation/Content%20review.mp4" muted loop playsinline preload="metadata"></video>
+            <div class="tabs__body">
+              <h3 class="feat__title">Content Review</h3>
+              <p class="feat__line"><b>Problem.</b> Brands had no way to vet influencer content before it went live, risking off-brand or non-compliant posts.</p>
+              <p class="feat__line"><b>Shipped.</b> A review step where brands approve or request changes to submitted content before it’s published.</p>
+            </div>
+          </div>
+          <div class="tabs__content" data-panel="t2" hidden>
+            <video class="feat__video" src="media/Features%20shipped%20on%20the%20new%20foundation/Estimated%20Performance.mp4" muted loop playsinline preload="metadata"></video>
+            <div class="tabs__body">
+              <h3 class="feat__title">Estimated Performance</h3>
+              <p class="feat__line"><b>Problem.</b> Brands set campaign budgets blind, with no sense of what their spend would actually return.</p>
+              <p class="feat__line"><b>Shipped.</b> Live projections of impressions, clicks, reach, and engagement rate that update with the budget during campaign creation.</p>
+            </div>
+          </div>
+          <div class="tabs__content" data-panel="t3" hidden>
+            <video class="feat__video" src="media/Features%20shipped%20on%20the%20new%20foundation/Cross-Posting.mp4" muted loop playsinline preload="metadata"></video>
+            <div class="tabs__body">
+              <h3 class="feat__title">Cross-Posting</h3>
+              <p class="feat__line"><b>Problem.</b> A campaign’s reach was capped to a single platform, leaving extra distribution on the table.</p>
+              <p class="feat__line"><b>Shipped.</b> The ability to ask influencers to cross-post a campaign’s content to additional social platforms from one place.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 10. outcome & impact ===== (hidden for now) -->
+  <!-- HIDDEN: Impact section
+  <section id="outcome">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">09 Impact</span><h2 class="sec-title">What changed</h2></div>
+      <div class="grid g-3">
+        <div class="card"><div class="num">—</div><div class="ph ph--text" style="margin-top:14px;">Metric / result</div></div>
+        <div class="card"><div class="num">—</div><div class="ph ph--text" style="margin-top:14px;">Metric / result</div></div>
+        <div class="card"><div class="num">—</div><div class="ph ph--text" style="margin-top:14px;">Metric / result</div></div>
+      </div>
+    </div>
+  </section>
+  -->
+
+  <!-- ===== 11. reflection ===== -->
+  <section id="reflection">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">10 Reflection</span><h2 class="sec-title">What I learned</h2></div>
+      <div class="acc" data-accordion>
+        <div class="acc-item is-open">
+          <button class="acc-trigger" aria-expanded="true"><span>Know when to break the system</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+          <div class="acc-panel"><div class="acc-panel__inner"><p>A design system speeds up the work and keeps things consistent, but I learned when to bend its rules to fit what the product and the user actually need.</p></div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger" aria-expanded="false"><span>Negative flows matter as much as the happy path</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+          <div class="acc-panel"><div class="acc-panel__inner"><p>On a complex product, designing only for the ideal journey isn’t enough. Accounting for errors and edge cases is just as important to scaling the experience.</p></div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger" aria-expanded="false"><span>Talk to your developers, early and often</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+          <div class="acc-panel"><div class="acc-panel__inner"><p>Understanding the engineering perspective and asking questions surfaced scenarios I’d have missed, and helped me shape a better experience with an engineering lens.</p></div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger" aria-expanded="false"><span>Live products teach you to handle real complexity</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+          <div class="acc-panel"><div class="acc-panel__inner"><p>Working on a product already in use taught me to design around messy, real-world data and intricate existing flows, not idealised ones.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== footer ===== -->
+  <footer class="cs-footer">
+    <section>
+      <div class="wrap">
+        <h2 class="display">Let&rsquo;s do something <span class="cs-footer__hl">amazing</span> together.</h2>
+        <div class="cs-footer__row">
+          <a href="https://www.linkedin.com/in/alok-kachhap-659ab2163/" target="_blank" rel="noopener">LinkedIn</a>
+          <span>•</span>
+          <a href="mailto:alok.kac@gmail.com">alok.kac@gmail.com</a>
+          <span>•</span>
+          <a href="work.html">Back to work</a>
+        </div>
+      </div>
+    </section>
+  </footer>
+
+  <div class="lb" id="lightbox" hidden aria-hidden="true">
+    <button class="lb__close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <div class="lb__inner">
+      <h3 class="lb__title"></h3>
+      <div class="lb__imgs"></div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    // Cover video: play from the start each time it scrolls into view; pause when it leaves.
+    var v = document.querySelector('.cover-img');
+    if (v) {
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { try { v.currentTime = 0; } catch (err) {} v.play().catch(function () {}); }
+            else { v.pause(); }
+          });
+        }, { threshold: 0.4 }).observe(v);
+      } else {
+        v.play && v.play().catch(function () {});
+      }
+    }
+  })();
+
+  (function () {
+    // Prototype mockup video: play from the start each time it scrolls into view.
+    var mv = document.querySelector('.desktop-mock__screen');
+    if (mv && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { try { mv.currentTime = 0; } catch (err) {} mv.play().catch(function () {}); }
+          else { mv.pause(); }
+        });
+      }, { threshold: 0.25 }).observe(mv);
+    }
+  })();
+
+  (function () {
+    // Feature thumbnail videos: muted + looping; play while in view, pause when out
+    // (hidden tab panels have no layout, so they stay paused until their tab is active).
+    var vids = document.querySelectorAll('.feat__video');
+    if (!vids.length) return;
+    if (!('IntersectionObserver' in window)) {
+      Array.prototype.forEach.call(vids, function (v) { v.play && v.play().catch(function () {}); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.play().catch(function () {}); }
+        else { e.target.pause(); }
+      });
+    }, { threshold: 0.25 });
+    Array.prototype.forEach.call(vids, function (v) { io.observe(v); });
+  })();
+
+  (function () {
+    // Double Diamond cards: blur-in + rise when they scroll into view (staggered).
+    var cards = document.querySelectorAll('.dd-reveal');
+    if (!cards.length) return;
+    if (!('IntersectionObserver' in window)) {
+      Array.prototype.forEach.call(cards, function (c) { c.classList.add('is-in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    }, { threshold: 0.2 });
+    Array.prototype.forEach.call(cards, function (c) { io.observe(c); });
+  })();
+
+  (function () {
+    // ClipPathLinks: on hover a blue panel wipes in from the edge nearest the
+    // cursor and wipes out toward the nearest edge on leave (ported from framer).
+    var NO_CLIP = 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)';
+    var BR = 'polygon(0 0, 100% 0, 0 0, 0% 100%)';
+    var TR = 'polygon(0 0, 0 100%, 100% 100%, 0% 100%)';
+    var BL = 'polygon(100% 100%, 100% 0, 100% 100%, 0 100%)';
+    var TL = 'polygon(0 0, 100% 0, 100% 100%, 100% 0)';
+    var ENTRY = { left: BR, bottom: BR, top: BR, right: TL };
+    var EXIT = { left: TR, bottom: TR, top: TR, right: BL };
+    var EXP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>';
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function nearestSide(el, x, y) {
+      var b = el.getBoundingClientRect();
+      return [
+        { p: Math.abs(b.left - x), s: 'left' },
+        { p: Math.abs(b.right - x), s: 'right' },
+        { p: Math.abs(b.top - y), s: 'top' },
+        { p: Math.abs(b.bottom - y), s: 'bottom' }
+      ].sort(function (a, c) { return a.p - c.p; })[0].s;
+    }
+    function anim(fill, from, to) {
+      fill.style.transition = 'none';
+      fill.style.clipPath = from;
+      void fill.offsetWidth; // reflow so the start state is applied before transitioning
+      fill.style.transition = 'clip-path 0.4s cubic-bezier(.4,0,.2,1)';
+      fill.style.clipPath = to;
+    }
+
+    Array.prototype.forEach.call(document.querySelectorAll('.sys-tile'), function (tile) {
+      var lab = tile.querySelector('.sys-tile__label');
+      var fill = document.createElement('div');
+      fill.className = 'clip-fill';
+      fill.innerHTML = '<span class="clip-fill__label">' + (lab ? lab.textContent : 'Open') + '</span>' +
+        '<span class="clip-fill__hint">View' + EXP + '</span>';
+      tile.appendChild(fill);
+      if (reduce) return;
+      tile.addEventListener('mouseenter', function (e) { anim(fill, ENTRY[nearestSide(tile, e.clientX, e.clientY)], NO_CLIP); });
+      tile.addEventListener('mouseleave', function (e) { anim(fill, NO_CLIP, EXIT[nearestSide(tile, e.clientX, e.clientY)]); });
+    });
+  })();
+
+  (function () {
+    // Accordion (What I learned): single-open, collapsible.
+    Array.prototype.forEach.call(document.querySelectorAll('[data-accordion]'), function (acc) {
+      var items = acc.querySelectorAll('.acc-item');
+      Array.prototype.forEach.call(items, function (item) {
+        var btn = item.querySelector('.acc-trigger');
+        btn.addEventListener('click', function () {
+          var wasOpen = item.classList.contains('is-open');
+          Array.prototype.forEach.call(items, function (i) {
+            i.classList.remove('is-open');
+            i.querySelector('.acc-trigger').setAttribute('aria-expanded', 'false');
+          });
+          if (!wasOpen) { item.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true'); }
+        });
+      });
+    });
+  })();
+
+  (function () {
+    // Scroll reveal: each section's elements fade + rise in a staggered cascade.
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    Array.prototype.forEach.call(document.querySelectorAll('.cs-hero .wrap, section .wrap'), function (wrap) {
+      Array.prototype.forEach.call(wrap.children, function (k, i) {
+        k.classList.add('reveal');
+        k.style.transitionDelay = Math.min(i * 0.08, 0.4) + 's';
+        io.observe(k);
+      });
+    });
+  })();
+
+  (function () {
+    // Design-system tiles open a lightbox with the full board image(s).
+    var lb = document.getElementById('lightbox');
+    if (lb) {
+      var imgsWrap = lb.querySelector('.lb__imgs');
+      var titleEl = lb.querySelector('.lb__title');
+
+      function open(title, list) {
+        titleEl.textContent = title || '';
+        imgsWrap.innerHTML = '';
+        list.split(',').forEach(function (src) {
+          src = src.trim();
+          if (!src) return;
+          var img = document.createElement('img');
+          img.src = src; img.alt = title || ''; img.loading = 'lazy';
+          imgsWrap.appendChild(img);
+        });
+        lb.hidden = false; lb.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        lb.scrollTop = 0;
+      }
+      function openVideo(title, src) {
+        titleEl.textContent = title || '';
+        imgsWrap.innerHTML = '';
+        var vid = document.createElement('video');
+        vid.src = src; vid.controls = true; vid.autoplay = true; vid.muted = true; vid.playsInline = true; vid.className = 'lb__video';
+        imgsWrap.appendChild(vid);
+        lb.hidden = false; lb.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        lb.scrollTop = 0;
+        vid.play().catch(function () {});
+      }
+      function close() {
+        lb.hidden = true; lb.setAttribute('aria-hidden', 'true');
+        imgsWrap.innerHTML = '';
+        document.body.style.overflow = '';
+      }
+
+      Array.prototype.forEach.call(document.querySelectorAll('[data-gallery]'), function (tile) {
+        tile.addEventListener('click', function () {
+          open(tile.getAttribute('data-title'), tile.getAttribute('data-gallery') || '');
+        });
+      });
+
+      var proto = document.querySelector('.desktop-mock__screen');
+      if (proto) {
+        proto.addEventListener('click', function () {
+          proto.pause();
+          openVideo('Campaign creation flow', proto.currentSrc || proto.src);
+        });
+      }
+      lb.querySelector('.lb__close').addEventListener('click', close);
+      lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !lb.hidden) close(); });
+    }
+  })();
+
+  (function () {
+    // Animated tabs (Features): sliding pill + animated content swap.
+    Array.prototype.forEach.call(document.querySelectorAll('[data-tabs]'), function (root) {
+      var pill = root.querySelector('.tabs__pill');
+      var btns = root.querySelectorAll('.tabs__btn');
+      var panels = root.querySelectorAll('[data-panel]');
+
+      function movePill(btn) {
+        pill.style.left = btn.offsetLeft + 'px';
+        pill.style.top = btn.offsetTop + 'px';
+        pill.style.width = btn.offsetWidth + 'px';
+        pill.style.height = btn.offsetHeight + 'px';
+      }
+      function activate(id) {
+        Array.prototype.forEach.call(btns, function (b) {
+          var on = b.getAttribute('data-tab') === id;
+          b.classList.toggle('is-active', on);
+          if (on) movePill(b);
+        });
+        Array.prototype.forEach.call(panels, function (p) {
+          p.hidden = p.getAttribute('data-panel') !== id;
+        });
+      }
+
+      Array.prototype.forEach.call(btns, function (b) {
+        b.addEventListener('click', function () { activate(b.getAttribute('data-tab')); });
+      });
+
+      // position the pill under the initial active tab once laid out
+      var active = root.querySelector('.tabs__btn.is-active') || btns[0];
+      requestAnimationFrame(function () { movePill(active); });
+      window.addEventListener('resize', function () {
+        movePill(root.querySelector('.tabs__btn.is-active') || btns[0]);
+      });
+    });
+  })();
+
+  (function () {
+    // Spotlight hover: a soft brand-blue glow follows the cursor across each card.
+    Array.prototype.forEach.call(document.querySelectorAll('.card'), function (card) {
+      card.addEventListener('mousemove', function (e) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+      card.addEventListener('mouseenter', function () { card.style.setProperty('--spot-o', '1'); });
+      card.addEventListener('mouseleave', function () { card.style.setProperty('--spot-o', '0'); });
+    });
+  })();
+
+  (function () {
+    // Before/after comparison sliders — drag anywhere on a frame to compare.
+    function pointX(e) { return e.touches ? e.touches[0].clientX : e.clientX; }
+
+    Array.prototype.forEach.call(document.querySelectorAll('.ba'), function (ba) {
+      var dragging = false;
+
+      function setP(clientX) {
+        var r = ba.getBoundingClientRect();
+        var p = ((clientX - r.left) / r.width) * 100;
+        p = Math.max(0, Math.min(100, p));
+        ba.style.setProperty('--p', p + '%');
+      }
+      function down(e) { dragging = true; ba.classList.add('is-drag'); setP(pointX(e)); e.preventDefault(); }
+      function move(e) { if (!dragging) return; setP(pointX(e)); }
+      function up() { dragging = false; ba.classList.remove('is-drag'); }
+
+      ba.addEventListener('mousedown', down);
+      ba.addEventListener('touchstart', down, { passive: false });
+      window.addEventListener('mousemove', move);
+      window.addEventListener('touchmove', move, { passive: false });
+      window.addEventListener('mouseup', up);
+      window.addEventListener('touchend', up);
+    });
+  })();
+
+  (function () {
+    // Dynamic-island table of contents, built from the page's section titles.
+    var titles = Array.prototype.slice.call(document.querySelectorAll('.sec-title'));
+    if (titles.length < 2) return;
+
+    var items = [];
+    titles.forEach(function (t) {
+      var sec = t.closest('section, header');
+      if (!sec) return;
+      if (!sec.id) sec.id = 'sec-' + (items.length + 1);
+      var text = (t.getAttribute('data-toc-title') || t.textContent || '').trim();
+      items.push({ id: sec.id, text: text, el: sec });
+    });
+    if (!items.length) return;
+
+    var root = document.createElement('div');
+    root.className = 'toc';
+    root.innerHTML =
+      '<div class="toc__backdrop"></div>' +
+      '<div class="toc__island">' +
+        '<div class="toc__pill">' +
+          '<span class="toc__dot"></span>' +
+          '<span class="toc__label">Contents</span>' +
+          '<svg class="toc__ring" width="24" height="24"><circle class="toc__ring-bg" cx="12" cy="12" r="10.75"></circle><circle class="toc__ring-fg" cx="12" cy="12" r="10.75"></circle></svg>' +
+        '</div>' +
+        '<div class="toc__panel">' +
+          '<div class="toc__head"><span>Table of contents</span>' +
+            '<button class="toc__close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>' +
+          '</div>' +
+          '<div class="toc__list"></div>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(root);
+
+    var island = root.querySelector('.toc__island');
+    var labelEl = root.querySelector('.toc__label');
+    var listEl = root.querySelector('.toc__list');
+    var ringFg = root.querySelector('.toc__ring-fg');
+    var circ = 2 * Math.PI * 10.75;
+    ringFg.setAttribute('stroke-dasharray', circ.toFixed(2));
+    ringFg.setAttribute('stroke-dashoffset', circ.toFixed(2));
+
+    function open() { root.classList.add('is-open'); }
+    function close() { root.classList.remove('is-open'); }
+    function goTo(el) { window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' }); }
+
+    var btns = {};
+    items.forEach(function (it) {
+      var b = document.createElement('button');
+      b.className = 'toc__item';
+      b.innerHTML = '<span></span><i></i>';
+      b.querySelector('span').textContent = it.text;
+      b.addEventListener('click', function (e) { e.stopPropagation(); goTo(it.el); close(); });
+      listEl.appendChild(b);
+      btns[it.id] = b;
+    });
+
+    island.addEventListener('click', function () { if (!root.classList.contains('is-open')) open(); });
+    root.querySelector('.toc__close').addEventListener('click', function (e) { e.stopPropagation(); close(); });
+    root.querySelector('.toc__backdrop').addEventListener('click', close);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+
+    var activeId = null;
+    function setActive(it) {
+      if (it.id === activeId) return;
+      activeId = it.id;
+      labelEl.textContent = it.text;
+      Object.keys(btns).forEach(function (k) { btns[k].classList.toggle('is-active', k === it.id); });
+    }
+    function onScroll() {
+      var active = items[0];
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].el.getBoundingClientRect().top <= 120) active = items[i]; else break;
+      }
+      setActive(active);
+      var total = document.documentElement.scrollHeight - window.innerHeight;
+      var pct = total > 0 ? Math.min(100, Math.max(0, (window.scrollY / total) * 100)) : 0;
+      ringFg.setAttribute('stroke-dashoffset', (circ - (pct / 100) * circ).toFixed(2));
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    onScroll();
+  })();
+  </script>
+
+  <script src="ask-ai.js"></script>
+  <script src="neuro-noise.js"></script>
+
+</body>
+</html>

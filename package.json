@@ -1,0 +1,9 @@
+{
+  "name": "portfolio-ask-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Serverless function that answers questions about Alok Kachhap's case studies using Claude.",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.1"
+  }
+}

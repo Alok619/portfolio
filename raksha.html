@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raksha · Case Study · Alok Kachhap</title>
+  <meta name="description" content="Case study: Raksha, AR as an assistive technology for community interaction towards rural sanitation and wellbeing." />
+  <link rel="icon" href="logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="casestudy.css" />
+  <link rel="stylesheet" href="ask-ai.css" />
+  <style>
+    /* page-specific tweaks */
+    .ph--phone { aspect-ratio: 9 / 16; }
+    .sub-lead { font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+    .saheli { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(20px, 3vw, 40px); align-items: center; }
+    @media (max-width: 760px) { .saheli { grid-template-columns: 1fr; } }
+
+    /* primary research subsections */
+    .psub { margin-bottom: clamp(40px, 6vw, 72px); }
+    .psub:last-child { margin-bottom: 0; }
+    .psub__title { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: clamp(22px, 2.6vw, 30px); color: var(--ink); margin: 0; }
+    .psub__lead { font-size: clamp(15px, 1.6vw, 18px); line-height: 1.6; color: var(--muted); max-width: 70ch; margin: 10px 0 clamp(18px, 2.4vw, 26px); }
+    .pfig { display: block; width: 100%; border: 0; padding: 0; background: transparent; cursor: zoom-in; }
+    .pfig img { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line);
+      box-shadow: 0 12px 32px -20px rgba(17,17,17,0.25); transition: box-shadow 0.35s ease, transform 0.35s ease; }
+    .pfig:hover img { box-shadow: 0 18px 44px -22px rgba(26,26,201,0.3); transform: translateY(-3px); }
+
+    /* grid-card hover effect (Design statement) */
+    .gridfx__bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; border-radius: inherit; pointer-events: none; }
+    .gridfx__grid { position: absolute; inset: -25%; transform: skewY(-12deg) translateY(8px); transition: transform 0.18s ease-out;
+      -webkit-mask-image: linear-gradient(225deg, #000, transparent); mask-image: linear-gradient(225deg, #000, transparent);
+      background-image: linear-gradient(to right, rgba(17,17,17,0.13) 1px, transparent 1px), linear-gradient(to bottom, rgba(17,17,17,0.13) 1px, transparent 1px);
+      background-size: 30px 30px; }
+    .gridfx:hover .gridfx__grid { transform: skewY(-12deg) translateY(0); }
+    .gridfx__glow { position: absolute; inset: -10%; opacity: 0; filter: blur(50px); transition: opacity 0.18s ease;
+      background: conic-gradient(#F35066 0deg, #F35066 117deg, #9071F9 180deg, #5182FC 240deg, #F35066 360deg); }
+    .gridfx:hover .gridfx__glow { opacity: 0.1; }
+    @media (prefers-reduced-motion: reduce) { .gridfx__grid { transition: none; } }
+
+    /* ResponseStream (fade mode) — word-by-word reveal when card enters view */
+    .stream-fade .sf-seg { display: inline-block; opacity: 0; }
+    .stream-fade .sf-seg--space { white-space: pre; }
+    .stream-fade.is-in .sf-seg { animation: sfFadeIn var(--sf-dur, 700ms) ease-out forwards; }
+    @keyframes sfFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { .stream-fade .sf-seg { opacity: 1 !important; animation: none !important; } }
+
+    /* solution — repeatable flow blocks (phone video + mockup below) */
+    .flows { display: flex; flex-direction: column; gap: clamp(48px, 7vw, 96px); }
+    .flow__top { display: flex; flex-wrap: wrap; align-items: center; gap: clamp(26px, 4.5vw, 60px); }
+    .flow__copy { flex: 1 1 320px; min-width: 260px; }
+    .flow__num { display: inline-block; font-family: 'Fraunces', Georgia, serif;
+      font-variation-settings: 'opsz' 144, 'wght' 600; font-size: clamp(38px, 5.5vw, 64px); line-height: 1; color: var(--blue); }
+    .flow__title { font-family: 'Fraunces', Georgia, serif; font-weight: 600; line-height: 1.1;
+      font-size: clamp(22px, 2.8vw, 33px); color: var(--ink); margin: 12px 0 12px; }
+    .flow__desc { font-size: clamp(15px, 1.6vw, 18px); line-height: 1.62; color: var(--muted); max-width: 48ch; }
+    .flow__points { list-style: none; margin: 0; padding: 0; max-width: 48ch; display: flex; flex-direction: column; gap: 9px; }
+    .flow__points li { position: relative; padding-left: 22px; font-size: clamp(14.5px, 1.55vw, 16.5px); line-height: 1.5; color: var(--muted); }
+    .flow__points li::before { content: ""; position: absolute; left: 2px; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+    .flow__points b { color: var(--ink); font-weight: 600; }
+    .flow__phone { flex: 0 0 auto; width: min(272px, 74vw); background: transparent; border: 0; box-shadow: none; }
+    .flow__phone video { width: 100%; height: auto; display: block; border: 0; outline: none; box-shadow: none; border-radius: 0; background: transparent; }
+    .flow__phone--ph { aspect-ratio: 440 / 906; display: grid; place-items: center; border: 0;
+      border-radius: 16px; background: rgba(17,17,17,0.04); }
+    .flow__phone--ph span { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(17,17,17,0.32); }
+    .flow:nth-of-type(even) .flow__phone { order: -1; }
+    .flow__shot { margin-top: clamp(20px, 3vw, 32px); }
+    .flow__shot img { border: 0; box-shadow: none; border-radius: 0; }
+    .pfig.flow__shot:hover img { box-shadow: none; transform: none; }
+    @media (max-width: 760px) { .flow:nth-of-type(even) .flow__phone { order: 0; } .flow__phone { margin: 0 auto; } }
+
+    /* feature carousel — centre + blurred neighbours, auto-advancing */
+    .cgal-head { text-align: center; margin-top: clamp(44px, 6vw, 80px); }
+    .fcar { position: relative; width: 100%; margin-top: clamp(22px, 3vw, 34px); height: clamp(440px, 62vw, 620px); }
+    .fcar__stage { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; perspective: 1000px; }
+    .fcar__item { position: absolute; width: clamp(180px, 26vw, 262px); aspect-ratio: 1105 / 2226;
+      transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out, filter 0.5s ease-in-out;
+      will-change: transform, opacity, filter; }
+    .fcar__item img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .fcar__btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 20; width: 44px; height: 44px;
+      border-radius: 50%; border: 1px solid var(--line); background: rgba(255,255,255,0.6); color: var(--ink);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); cursor: pointer; display: grid; place-items: center;
+      transition: background 0.2s ease, transform 0.1s ease; }
+    .fcar__btn:hover { background: #fff; }
+    .fcar__btn:active { transform: translateY(-50%) scale(0.94); }
+    .fcar__btn svg { width: 20px; height: 20px; }
+    .fcar__btn--prev { left: clamp(4px, 2vw, 28px); }
+    .fcar__btn--next { right: clamp(4px, 2vw, 28px); }
+
+    /* reflection — bullet list */
+    .reflist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: clamp(14px, 2vw, 20px); max-width: 78ch; }
+    .reflist li { position: relative; padding-left: 26px; font-size: clamp(15px, 1.7vw, 18px); line-height: 1.6; color: var(--muted); }
+    .reflist li::before { content: ""; position: absolute; left: 3px; top: 10px; width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+    .reflist b { color: var(--ink); font-weight: 600; }
+
+    /* usage-charts auto-slider */
+    .uslide { position: relative; width: 100%; aspect-ratio: 4 / 3; border-radius: 14px; overflow: hidden;
+      border: 1px solid var(--line); background: #fff; box-shadow: 0 12px 32px -20px rgba(17,17,17,0.25); }
+    .uslide__viewport { position: absolute; inset: 0; }
+    .uslide__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 16px;
+      opacity: 0; transition: opacity 0.7s ease; }
+    .uslide__img.is-active { opacity: 1; }
+    .uslide__dots { position: absolute; left: 0; right: 0; bottom: 10px; z-index: 2; display: flex; justify-content: center; gap: 7px; }
+    .uslide__dots button { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%; cursor: pointer;
+      background: rgba(17,17,17,0.22); transition: background 0.2s ease, transform 0.2s ease; }
+    .uslide__dots button.is-active { background: var(--blue); transform: scale(1.25); }
+
+    /* radial orbital stakeholder map (light) */
+    .orbit { position: relative; width: 100%; height: clamp(480px, 64vw, 640px); margin-top: clamp(10px, 2vw, 18px);
+      border-radius: 20px; overflow: hidden; border: 1px solid var(--line);
+      background: radial-gradient(circle at 50% 46%, #f2f4ee, #e2e6dd 74%); }
+    .orbit__stage { position: absolute; inset: 0; }
+    .orbit__rings span { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px solid rgba(26,26,201,0.14); }
+    .orbit__rings span:nth-child(1) { width: min(62vw, 380px); height: min(62vw, 380px); }
+    .orbit__rings span:nth-child(2) { width: min(80vw, 500px); height: min(80vw, 500px); border-color: rgba(26,26,201,0.08); }
+    .orbit__hub { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%); z-index: 6; width: 68px; height: 68px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; cursor: pointer;
+      background: radial-gradient(circle at 32% 30%, #5a5aff, #1a1ac9); color: #fff;
+      font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 13px;
+      box-shadow: 0 0 0 8px rgba(26,26,201,0.10), 0 12px 40px -8px rgba(26,26,201,0.55); }
+    .orbit__hub::before, .orbit__hub::after { content: ""; position: absolute; inset: 0; border-radius: 50%;
+      border: 1px solid rgba(26,26,201,0.4); animation: orbitPing 2.6s cubic-bezier(0,0,0.2,1) infinite; }
+    .orbit__hub::after { animation-delay: 1.3s; }
+    @keyframes orbitPing { 0% { transform: scale(1); opacity: .6; } 100% { transform: scale(2.1); opacity: 0; } }
+    .orbit__hint { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; z-index: 6;
+      font-size: 11.5px; letter-spacing: 0.04em; color: var(--muted); pointer-events: none; }
+
+    .onode { position: absolute; left: 50%; top: 46%; width: 0; height: 0; z-index: 2; }
+    .onode__dot { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); width: 46px; height: 46px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      background: rgba(255,255,255,0.75); border: 1px solid rgba(17,17,17,0.14); color: #1a1ac9;
+      -webkit-backdrop-filter: blur(8px) saturate(140%); backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 8px 20px -12px rgba(40,50,30,0.35);
+      transition: transform 0.3s var(--slow), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
+    .onode__dot svg { width: 19px; height: 19px; }
+    .onode.is-related .onode__dot { border-color: rgba(26,26,201,0.5); background: rgba(26,26,201,0.10); }
+    .onode.is-active .onode__dot { background: #1a1ac9; color: #fff; border-color: #1a1ac9; transform: translate(-50%, -50%) scale(1.32); box-shadow: 0 10px 28px -8px rgba(26,26,201,0.6); }
+    .onode__label { position: absolute; left: 0; top: 30px; transform: translateX(-50%); white-space: nowrap; pointer-events: none;
+      font-size: 11.5px; font-weight: 600; letter-spacing: 0.02em; color: var(--ink-soft); transition: color 0.3s ease; }
+    .onode.is-active .onode__label { color: #1a1ac9; }
+    .onode__card { position: absolute; left: 0; top: 40px; transform: translateX(-50%); width: min(266px, 74vw); text-align: left;
+      background: rgba(255,255,255,0.9); -webkit-backdrop-filter: blur(14px) saturate(150%); backdrop-filter: blur(14px) saturate(150%);
+      border: 1px solid var(--glass-brd); border-radius: 14px; padding: 16px; z-index: 50; box-shadow: 0 18px 44px -20px rgba(40,50,30,0.4);
+      opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+    .onode.is-active .onode__card { opacity: 1; pointer-events: auto; }
+    .onode__top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+    .otier { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 100px; border: 1px solid; }
+    .otier--primary { color: #fff; background: #1a1ac9; border-color: #1a1ac9; }
+    .otier--secondary { color: #1a1ac9; background: rgba(26,26,201,0.12); border-color: rgba(26,26,201,0.25); }
+    .otier--supporter { color: var(--ink-soft); background: rgba(17,17,17,0.05); border-color: var(--line); }
+    .onode__ctitle { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 15px; color: var(--ink); }
+    .onode__role { font-size: 12.5px; line-height: 1.5; color: var(--muted); margin-top: 6px; }
+    .obar-wrap { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+    .obar-lbl { display: flex; justify-content: space-between; font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+    .obar { height: 4px; border-radius: 100px; background: rgba(17,17,17,0.1); overflow: hidden; }
+    .obar span { display: block; height: 100%; border-radius: 100px; background: linear-gradient(to right, #5a5aff, #1a1ac9); }
+    .oconns { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+    .oconns h5 { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; font-weight: 600; }
+    .oconns div { display: flex; flex-wrap: wrap; gap: 6px; }
+    .oconn { display: inline-flex; align-items: center; gap: 4px; font: inherit; font-size: 11px; cursor: pointer;
+      color: var(--ink-soft); background: transparent; border: 1px solid var(--line); border-radius: 100px; padding: 3px 9px;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+    .oconn:hover { background: rgba(26,26,201,0.08); color: #1a1ac9; border-color: rgba(26,26,201,0.3); }
+    @media (prefers-reduced-motion: reduce) { .orbit__hub::before, .orbit__hub::after { animation: none; } }
+
+    /* stat bento grid */
+    .statbento { display: grid; gap: clamp(12px, 1.6vw, 20px); grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(150px, auto); }
+    .statbento .card { display: flex; flex-direction: column; }
+    .statbento__big { grid-column: span 2; grid-row: span 2; }
+    .statbento__wide { grid-column: span 2; }
+    .stat__num { font-family: 'Fraunces', Georgia, serif; font-weight: 600; line-height: 1; color: #1a1ac9;
+      font-variant-numeric: tabular-nums; font-size: clamp(34px, 4.6vw, 54px); }
+    .statbento__big .stat__num { font-size: clamp(58px, 8vw, 108px); }
+    .stat__label { font-weight: 700; font-size: 14px; letter-spacing: 0.01em; margin-top: 12px; color: var(--ink); }
+    .statbento__big .stat__label { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: clamp(19px, 2.2vw, 26px); }
+    .stat__desc { font-size: 14px; line-height: 1.5; color: var(--muted); margin-top: 10px; max-width: 44ch; }
+    .stat__src { margin-top: auto; padding-top: 14px; font-size: 12px; font-style: italic; color: var(--ink-soft); }
+    @media (max-width: 760px) {
+      .statbento { grid-template-columns: repeat(2, 1fr); }
+      .statbento__big { grid-column: span 2; grid-row: auto; }
+      .statbento__wide { grid-column: span 2; }
+    }
+    @media (max-width: 480px) {
+      .statbento { grid-template-columns: 1fr; }
+      .statbento__big, .statbento__wide { grid-column: auto; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ===== header ===== -->
+  <header class="site-header">
+    <div style="display:flex;align-items:center;gap:18px;">
+      <a class="site-header__logo" href="index.html" aria-label="Home"><img src="media/alok-logo.svg" alt="Alok Kachhap" /></a>
+      <a class="back-link" href="work.html#projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>All work</a>
+    </div>
+    <nav class="site-header__links">
+      <a class="hdr-icon" href="https://www.linkedin.com/in/alok-kachhap-659ab2163/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.08 1.4-2.08 2.85V21H9z"/></svg>
+      </a>
+      <a class="hdr-resume" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg><span>Resume</span></a>
+    </nav>
+  </header>
+
+  <!-- ===== 1. hero ===== -->
+  <header class="cs-hero">
+    <div class="wrap">
+      <p class="cs-hero__meta">
+        <span class="eyebrow">Case Study</span>
+        <span class="dot">•</span> AR / Assistive Technology
+        <span class="dot">•</span> Rural Sanitation
+      </p>
+      <h1 class="cs-hero__title display">Raksha</h1>
+      <p class="cs-hero__tagline">AR as an assistive technology for building community interaction towards rural sanitation and wellbeing.</p>
+
+      <div class="cs-facts">
+        <div class="cs-fact"><span>Role</span><strong>UX Research &amp; Design</strong></div>
+        <div class="cs-fact"><span>Timeline</span><strong>2022 to 23</strong></div>
+        <div class="cs-fact"><span>Domain</span><strong>Social Impact · SDG 6</strong></div>
+        <div class="cs-fact"><span>Type</span><strong>Mobile App + AR</strong></div>
+      </div>
+
+      <div class="cs-hero__cover">
+        <video class="cover-img" src="media/raksha-hero-v2.mp4" muted playsinline preload="auto"></video>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== 2. overview / brief ===== -->
+  <section id="overview">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">01 Project Brief</span><h2 class="sec-title">What is Raksha?</h2></div>
+      <div class="grid g-2" style="align-items:start;">
+        <div>
+          <p class="lead">Raksha is a mobile app that uses augmented reality as an assistive technology to spark community participation around rural sanitation and wellbeing. Grounded in <b>SDG 6 (Clean Water &amp; Sanitation)</b>, it shifts the focus from building toilets to driving the behaviour change that makes them last.</p>
+          <p class="lead" style="margin-top: clamp(18px, 2.5vw, 28px);">The goal: make sanitation feel collective, rewarding, and approachable for low-literacy, first-time smartphone users in rural India.</p>
+        </div>
+        <ul class="points">
+          <li>UX research</li>
+          <li>User interviews</li>
+          <li>Conducting surveys</li>
+          <li>Wireframing</li>
+          <li>High-fidelity design</li>
+          <li>Usability testing</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 3. the challenge ===== -->
+  <section id="challenge">
+    <div class="wrap">
+      <div class="sec-head" style="max-width:none;"><span class="eyebrow">02 The Challenge</span><h2 class="sec-title">The problem we set out to solve</h2></div>
+      <div class="grid g-2" style="align-items:start;">
+        <p class="lead">Behavioural change is the crucial, and hardest, part of promoting good sanitation. Conventional programs assume that providing infrastructure is enough, but real, lasting change depends on community ownership, awareness, and motivation, not just access.</p>
+        <ul class="points">
+          <li><b>Infrastructure isn’t enough.</b> Toilets get built but go unused without sustained behaviour change.</li>
+          <li><b>Top-down messaging falls flat.</b> Programs talk at communities rather than involving them.</li>
+          <li><b>Low literacy, first-time users.</b> Text-heavy, complex interfaces exclude the very people they aim to help.</li>
+          <li><b>Weak feedback loops.</b> People rarely see the collective impact of their everyday actions.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 4. research ===== -->
+  <section id="research">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">03 Research</span><h2 class="sec-title">Understanding the ground reality</h2></div>
+      <p class="lead" style="margin-bottom: clamp(24px, 3.5vw, 40px);">I combined secondary research, stakeholder mapping, and primary field work, including ethnographic study, to understand how rural communities actually relate to sanitation.</p>
+
+      <h4 class="sys-subhead">Secondary research</h4>
+      <p class="lead" style="max-width:none; margin-bottom: clamp(20px, 3vw, 32px);">Behavioural change, not just infrastructure, is the crucial lever for long-term sanitation improvement in rural India. The evidence is clear, and so is the opportunity: rural India is mobile-first and hungry to engage.</p>
+
+      <div class="statbento">
+        <div class="card statbento__big">
+          <div class="stat__num" data-count="100" data-suffix="%">0%</div>
+          <div class="stat__label">Rural users are mobile-first</div>
+          <p class="stat__desc">Of rural digital users reach the internet on mobile phones, the screen we had to design for.</p>
+          <div class="stat__src">Kantar ICUBE 2020</div>
+        </div>
+        <div class="card statbento__wide">
+          <div class="stat__num" data-count="299" data-suffix="M">0M</div>
+          <div class="stat__label">Rural internet users</div>
+          <p class="stat__desc">Rural active internet users by 2020, around 31% penetration and climbing.</p>
+          <div class="stat__src">Kantar ICUBE 2020</div>
+        </div>
+        <div class="card">
+          <div class="stat__num" data-count="80" data-suffix="%">0%</div>
+          <div class="stat__label">Toilet access</div>
+          <p class="stat__desc">Households with toilet access after a behaviour-change campaign, up from 30%.</p>
+          <div class="stat__src">UNICEF</div>
+        </div>
+        <div class="card">
+          <div class="stat__num" data-count="47" data-suffix="%">0%</div>
+          <div class="stat__label">Fewer diarrhoea cases</div>
+          <p class="stat__desc">Lower incidence among children in participating households.</p>
+          <div class="stat__src">WHO</div>
+        </div>
+      </div>
+
+      <div class="grid g-2" style="align-items:start; margin-top: clamp(16px, 2vw, 24px);">
+        <div class="uslide" data-uslide>
+          <div class="uslide__viewport">
+            <img class="uslide__img is-active" src="media/raksha/research/usage-1.png" alt="Rural internet activities: entertainment 96%, communication 87%, social media 79% (Kantar ICUBE 2020)" loading="lazy" />
+            <img class="uslide__img" src="media/raksha/research/usage-2.png" alt="Urban vs rural active internet users, 2017 to 2020 (Kantar ICUBE 2020)" loading="lazy" />
+            <img class="uslide__img" src="media/raksha/research/usage-3.png" alt="Device usage across All India, Urban and Rural (Kantar ICUBE 2020)" loading="lazy" />
+          </div>
+          <div class="uslide__dots" data-uslide-dots>
+            <button type="button" class="is-active" aria-label="Chart 1"></button>
+            <button type="button" aria-label="Chart 2"></button>
+            <button type="button" aria-label="Chart 3"></button>
+          </div>
+        </div>
+        <div>
+          <h3 class="feat__title" style="margin-top:0;">What the data told me</h3>
+          <ul class="points">
+            <li><b>Mobile-first by default.</b> Rural users reach the internet almost entirely through phones (100%), barely through PCs (13%).</li>
+            <li><b>They’re here to engage, not transact.</b> Rural use skews to entertainment (96%), communication (87%), and social media (79%) over commerce.</li>
+            <li><b>Top-down messaging fails.</b> Conventional programs assume information alone changes behaviour, with one-way messages from outside “experts.”</li>
+            <li><b>Change needs participation.</b> Lasting change comes from improving education, communication, and information systems with the community, not at it.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: clamp(16px, 2vw, 24px);">
+        <span class="eyebrow">My observation</span>
+        <p class="feat__line stream-fade" style="font-size:15px; margin-top:8px;">Real community mobilisation needs <b>participatory methods</b>, which meant making the solution more <b>personalised and user-centric</b>. Paired with a mobile-first, engagement-led rural audience, this pushed me to research how smartphones are actually used in villages, and toward an app that feels social and rewarding rather than instructional.</p>
+      </div>
+
+      <h4 class="sys-subhead">Stakeholder mapping</h4>
+      <p class="psub__lead">Everyone who shapes sanitation in the village orbits the community. Tap a stakeholder to see their tier, role, influence, and who they connect to.</p>
+      <div class="orbit" data-orbit>
+        <div class="orbit__stage" data-orbit-stage>
+          <div class="orbit__rings" aria-hidden="true"><span></span><span></span></div>
+          <div class="orbit__hub" aria-hidden="true"><span>Raksha</span></div>
+        </div>
+        <p class="orbit__hint">Tap a node · tap the centre to reset</p>
+      </div>
+
+      <h4 class="sys-subhead">Primary research</h4>
+
+      <div class="psub">
+        <h3 class="psub__title">Field study</h3>
+        <p class="psub__lead">I visited Baragain Village in Lohardaga, Jharkhand, mapping its layout, demographics, and daily life: 304 households, around 1,478 people, and a 66.9% literacy rate, with nearly every home owning at least one smartphone.</p>
+        <button class="pfig" data-title="Field study · Baragain Village" data-gallery="media/raksha/primary/field-study.jpg">
+          <img src="media/raksha/primary/field-study.jpg" alt="Field study: location, village top view, and demographics of Baragain Village" loading="lazy" />
+        </button>
+      </div>
+
+      <div class="psub">
+        <h3 class="psub__title">Habitation profile</h3>
+        <p class="psub__lead">Profiling people by age group revealed who actually uses smartphones, and how. The 15–28 group are active users; older adults rarely are, shaping who the app must reach and through whom.</p>
+        <button class="pfig" data-title="Habitation profile · who uses smartphones" data-gallery="media/raksha/primary/habitation.png">
+          <img src="media/raksha/primary/habitation.png" alt="Habitation profile: personas by age group and how they use smartphones" loading="lazy" />
+        </button>
+      </div>
+
+      <div class="psub">
+        <h3 class="psub__title">Ethnographic study</h3>
+        <p class="psub__lead">Observing daily routines surfaced the real barriers: open defecation as habit, unsafe waste disposal, weak handwashing practices, and abandoned government toilets. Problems of behaviour, not just infrastructure.</p>
+        <div class="grid" style="gap: clamp(16px, 2vw, 24px);">
+          <button class="pfig" data-title="Ethnographic study · daily sanitation behaviours" data-gallery="media/raksha/primary/ethno-1.png">
+            <img src="media/raksha/primary/ethno-1.png" alt="Daily sanitation behaviours and their downstream health issues" loading="lazy" />
+          </button>
+          <button class="pfig" data-title="Ethnographic study · government toilets" data-gallery="media/raksha/primary/ethno-2.png?v=2">
+            <img src="media/raksha/primary/ethno-2.png?v=2" alt="Problems with government toilets, observed on site" loading="lazy" />
+          </button>
+          <button class="pfig" data-title="Ethnographic study · campaigns vs. reality" data-gallery="media/raksha/primary/ethno-3.png?v=3">
+            <img src="media/raksha/primary/ethno-3.png?v=3" alt="Government sanitation campaigns versus on-ground problems" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 5. analysis ===== -->
+  <section id="analysis">
+    <div class="wrap">
+      <div class="sec-head" style="max-width:none;"><span class="eyebrow">04 Analysis</span><h2 class="sec-title">From insights to a design direction</h2></div>
+      <p class="lead" style="max-width:none; margin-bottom: clamp(36px, 5vw, 56px);">I turned a mountain of field notes into a clear direction: clustering observations, finding the opportunity, defining who to design for, mapping their journey, and distilling it all into a single design statement.</p>
+
+      <div class="psub">
+        <h3 class="psub__title">01 · Affinity mapping</h3>
+        <p class="psub__lead">I clustered raw research notes into themes to see the patterns, low awareness, weak personal motivation, infrastructure gaps, and top-down campaigns that fail to connect.</p>
+        <button class="pfig" data-title="Affinity mapping" data-gallery="media/raksha/analysis/affinity.png?v=2">
+          <img src="media/raksha/analysis/affinity.png?v=2" alt="Affinity mapping of research observations into themes" loading="lazy" />
+        </button>
+      </div>
+
+      <div class="psub">
+        <h3 class="psub__title">02 · Identifying the scope</h3>
+        <p class="psub__lead">The patterns pointed to a clear opening: with smartphones now common in rural India, interactive, community-based platforms can drive Information, Education &amp; Communication (IEC), and a real sense of shared ownership.</p>
+        <button class="pfig" data-title="Identifying the scope" data-gallery="media/raksha/analysis/scope.png?v=2">
+          <img src="media/raksha/analysis/scope.png?v=2" alt="Identifying the design scope from research insights" loading="lazy" />
+        </button>
+      </div>
+
+      <div class="psub">
+        <h3 class="psub__title">03 · Defining the user segment</h3>
+        <p class="psub__lead">I focused on the 15–28 age group: active smartphone users who adopt new trends quickly and influence their peers, the natural carriers of behaviour change within the community.</p>
+        <button class="pfig" data-title="User segment · 15–28" data-gallery="media/raksha/analysis/user-segment.png?v=2">
+          <img src="media/raksha/analysis/user-segment.png?v=2" alt="User segment persona for the 15 to 28 age group" loading="lazy" />
+        </button>
+      </div>
+
+      <div class="psub">
+        <h3 class="psub__title">04 · User journey</h3>
+        <p class="psub__lead">Mapping the journey across Learning, Motivation, and Practice exposed where engagement drops, and where design could intervene, turning pain points into opportunities.</p>
+        <div class="grid" style="gap: clamp(16px, 2vw, 24px);">
+          <button class="pfig" data-title="User journey · feelings &amp; actions" data-gallery="media/raksha/analysis/journey-1.png">
+            <img src="media/raksha/analysis/journey-1.png" alt="User journey map: phases, thoughts and feelings, and actions" loading="lazy" />
+          </button>
+          <button class="pfig" data-title="User journey · pain points &amp; opportunities" data-gallery="media/raksha/analysis/journey-2.png">
+            <img src="media/raksha/analysis/journey-2.png" alt="User journey map: pain points and opportunities" loading="lazy" />
+          </button>
+        </div>
+      </div>
+
+      <div class="psub" style="margin-bottom:0;">
+        <h3 class="psub__title">05 · Design statement</h3>
+        <p class="psub__lead">Everything converged into one statement, the What, Whom, Why, and How, that anchored the rest of the project.</p>
+        <button class="pfig" data-title="Design statement · What, Whom, Why, How" data-gallery="media/raksha/analysis/design-statement.png" style="margin-bottom: clamp(18px, 2.4vw, 26px);">
+          <img src="media/raksha/analysis/design-statement.png" alt="Design statement diagram: what, whom, why and how" loading="lazy" />
+        </button>
+        <div class="card">
+          <span class="eyebrow">Design statement</span>
+          <p class="feat__line stream-fade" style="font-size:clamp(17px,2vw,21px); line-height:1.5; color:var(--ink); margin-top:10px;">For smartphone-using individuals aged <b>15–28 in rural villages</b>, Raksha is an <b>interactive, community-based platform</b> that drives <b>long-term behaviour change towards good sanitation</b>, through community learning and motivation rather than top-down instruction.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 6. ideation ===== -->
+  <section id="ideation">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">05 Ideation</span><h2 class="sec-title">Finding the right idea</h2></div>
+      <p class="lead" style="max-width:none; margin-bottom: clamp(36px, 5vw, 56px);">With a clear design statement in hand, I generated broadly, sharpened the concept, and prioritised what to actually build.</p>
+
+      <div class="psub">
+        <h3 class="psub__title">01 · Brainstorming</h3>
+        <p class="psub__lead">I ran a wide-open brainstorm, generating ideas across features, usability, communication, technology, awareness, and gamification, to widen the solution space before narrowing it down.</p>
+        <button class="pfig" data-title="Brainstorming" data-gallery="media/raksha/ideation/brainstorming.png?v=2">
+          <img src="media/raksha/ideation/brainstorming.png?v=2" alt="Brainstorming board of ideas grouped by theme" loading="lazy" />
+        </button>
+      </div>
+
+      <div class="psub">
+        <h3 class="psub__title">02 · Idea napkin</h3>
+        <p class="psub__lead">I distilled the brainstorm into a single, sharp pitch, the product, target group, the problems it solves, how, and the benefits, as a one-page sanity check before committing.</p>
+        <button class="pfig" data-title="Idea napkin" data-gallery="media/raksha/ideation/idea-napkin.png">
+          <img src="media/raksha/ideation/idea-napkin.png" alt="Idea napkin: pitch, target group, problems, solutions and benefits" loading="lazy" />
+        </button>
+      </div>
+
+      <div class="psub">
+        <h3 class="psub__title">03 · Feature ideation (MoSCoW)</h3>
+        <p class="psub__lead">I prioritised features with a MoSCoW analysis, separating the essentials, like social sharing, rewards, and AR resources, from the nice-to-haves and what to leave out for now.</p>
+        <button class="pfig" data-title="Feature ideation · MoSCoW" data-gallery="media/raksha/ideation/feature-ideation.png?v=2">
+          <img src="media/raksha/ideation/feature-ideation.png?v=2" alt="MoSCoW prioritisation of features: must, should, could and won't have" loading="lazy" />
+        </button>
+      </div>
+
+      <div class="psub" style="margin-bottom:0;">
+        <h3 class="psub__title">04 · The AR bet</h3>
+        <p class="psub__lead">Augmented reality became the way to turn a dry, top-down topic into something playful, social, and emotionally engaging, meeting people where they are.</p>
+        <button class="pfig" data-title="The AR bet" data-gallery="media/raksha/ideation/ar-bet.png">
+          <img src="media/raksha/ideation/ar-bet.png" alt="The AR bet: using augmented reality to make sanitation engaging" loading="lazy" />
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 7. solution ===== -->
+  <section id="solution">
+    <div class="wrap">
+      <div class="sec-head" style="max-width:none;"><span class="eyebrow">06 Solution</span><h2 class="sec-title">Raksha, built around the community</h2></div>
+      <p class="lead" style="margin-bottom: clamp(24px, 3.5vw, 40px);">A simple, visual, audio-friendly app that lowers the barrier to participation, and uses AR to make sanitation feel rewarding and shared.</p>
+
+      <div class="flows">
+        <article class="flow">
+          <div class="flow__top">
+            <div class="flow__copy">
+              <span class="flow__num">01</span>
+              <h3 class="flow__title">Getting started with the application</h3>
+              <ul class="flow__points">
+                <li>Choose your <b>preferred language</b> to begin.</li>
+                <li>Move through <b>four quick intro screens</b> showing what the app does.</li>
+                <li>Follow a <b>progress timeline</b> that shows what’s done and what’s next.</li>
+                <li><b>Scan your Aadhaar card</b> to register with minimal typing.</li>
+              </ul>
+            </div>
+            <div class="flow__phone">
+              <video class="flow__video" src="media/raksha/solution/onboarding-flow.mp4" muted loop playsinline preload="metadata"></video>
+            </div>
+          </div>
+        </article>
+
+        <article class="flow">
+          <div class="flow__top">
+            <div class="flow__copy">
+              <span class="flow__num">02</span>
+              <h3 class="flow__title">Scan, learn, and complete tasks in AR</h3>
+              <ul class="flow__points">
+                <li>Open a task from the <b>task list</b>.</li>
+                <li><b>Scan its AR target</b>, a poster on a home wall, with your phone.</li>
+                <li>Watch <b>interactive 3D animations and videos</b> explaining what to do and why.</li>
+                <li>Mark the task <b>complete</b> and <b>earn rewards</b> for taking part.</li>
+              </ul>
+            </div>
+            <div class="flow__phone">
+              <video class="flow__video flow__video--sound" src="media/raksha/solution/task-completion-flow.mp4" muted autoplay loop playsinline preload="metadata"></video>
+            </div>
+          </div>
+        </article>
+
+        <article class="flow">
+          <div class="flow__top">
+            <div class="flow__copy">
+              <span class="flow__num">03</span>
+              <h3 class="flow__title">Community feed and rewards</h3>
+              <ul class="flow__points">
+                <li>See <b>hygiene tasks other villagers</b> have shared.</li>
+                <li>Get <b>inspired</b> and learn from one another.</li>
+                <li><b>Like and comment</b> on posts, including <b>audio comments</b> for those who don’t type.</li>
+                <li>Open the <b>rewards page</b> to track points and claim gifts.</li>
+              </ul>
+            </div>
+            <div class="flow__phone">
+              <video class="flow__video" src="media/raksha/solution/community-flow.mp4" muted loop playsinline preload="metadata"></video>
+            </div>
+          </div>
+        </article>
+
+        <article class="flow">
+          <div class="flow__top">
+            <div class="flow__copy">
+              <span class="flow__num">04</span>
+              <h3 class="flow__title">Report hygiene issues on the ground</h3>
+              <ul class="flow__points">
+                <li>Spot a defect: <b>broken toilets, dry or leaking taps, unsafe drinking water</b>.</li>
+                <li><b>Snap a photo</b> and file a quick report.</li>
+                <li>Each report puts the problem <b>on the record</b>.</li>
+                <li>Makes it <b>visible to NGOs and government bodies</b> so they can act.</li>
+              </ul>
+            </div>
+            <div class="flow__phone">
+              <video class="flow__video" src="media/raksha/solution/report-flow.mp4" muted loop playsinline preload="metadata"></video>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- app screens — feature carousel -->
+      <div class="cgal-head">
+        <span class="eyebrow">A closer look</span>
+        <h3 class="psub__title" style="margin-top:6px;">The app, screen by screen</h3>
+      </div>
+      <div class="fcar" data-fcar aria-label="App screens carousel">
+        <div class="fcar__stage" data-fcar-stage>
+          <div class="fcar__item"><img src="media/raksha/solution/gallery/g1.png?v=3" alt="Raksha app screen" loading="lazy" /></div>
+          <div class="fcar__item"><img src="media/raksha/solution/gallery/g2.png?v=3" alt="Raksha app screen" loading="lazy" /></div>
+          <div class="fcar__item"><img src="media/raksha/solution/gallery/g3.png?v=3" alt="Raksha app screen" loading="lazy" /></div>
+          <div class="fcar__item"><img src="media/raksha/solution/gallery/g4.png?v=3" alt="Raksha app screen" loading="lazy" /></div>
+          <div class="fcar__item"><img src="media/raksha/solution/gallery/g5.png?v=3" alt="Raksha app screen" loading="lazy" /></div>
+          <div class="fcar__item"><img src="media/raksha/solution/gallery/g6.png?v=3" alt="Raksha app screen" loading="lazy" /></div>
+          <div class="fcar__item"><img src="media/raksha/solution/gallery/g7.png?v=3" alt="Raksha app screen" loading="lazy" /></div>
+          <div class="fcar__item"><img src="media/raksha/solution/gallery/g8.png?v=3" alt="Raksha app screen" loading="lazy" /></div>
+          <div class="fcar__item"><img src="media/raksha/solution/gallery/g9.png?v=3" alt="Raksha app screen" loading="lazy" /></div>
+          <div class="fcar__item"><img src="media/raksha/solution/gallery/g10.png?v=3" alt="Raksha app screen" loading="lazy" /></div>
+          <div class="fcar__item"><img src="media/raksha/solution/gallery/g11.png?v=3" alt="Raksha app screen" loading="lazy" /></div>
+        </div>
+        <button class="fcar__btn fcar__btn--prev" type="button" data-fcar-prev aria-label="Previous screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+        <button class="fcar__btn fcar__btn--next" type="button" data-fcar-next aria-label="Next screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 8. reflection ===== -->
+  <section id="reflection">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">07 Reflection</span><h2 class="sec-title">My experience building Raksha</h2></div>
+      <ul class="reflist">
+        <li><b>Ground-level research shapes meaningful design.</b> Working directly with rural communities in their own environment surfaced needs and challenges no report could, and reminded me that empathy and observation matter as much as design tools.</li>
+        <li><b>Good design is simple and useful, not just stylish.</b> With limited resources, the work has to be easy to understand, accessible, and focused on real needs.</li>
+        <li><b>Design with users, not for them.</b> Involving the community in the process made the solution more relevant, accepted, and sustainable.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== footer ===== -->
+  <footer class="cs-footer">
+    <section>
+      <div class="wrap">
+        <h2 class="display">Let&rsquo;s do something <span class="cs-footer__hl">amazing</span> together.</h2>
+        <div class="cs-footer__row">
+          <a href="https://www.linkedin.com/in/alok-kachhap-659ab2163/" target="_blank" rel="noopener">LinkedIn</a>
+          <span>•</span>
+          <a href="mailto:alok.kac@gmail.com">alok.kac@gmail.com</a>
+          <span>•</span>
+          <a href="work.html">Back to work</a>
+        </div>
+      </div>
+    </section>
+  </footer>
+
+  <div class="lb" id="lightbox" hidden aria-hidden="true">
+    <button class="lb__close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <div class="lb__inner">
+      <h3 class="lb__title"></h3>
+      <div class="lb__imgs"></div>
+    </div>
+  </div>
+
+  <script src="casestudy.js"></script>
+  <script src="ask-ai.js"></script>
+  <script src="neuro-noise.js"></script>
+  <script>
+  (function () {
+    // Count-up for the moving-dot stat cards, triggered when they scroll into view.
+    var nums = document.querySelectorAll('[data-count]');
+    if (!nums.length) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function animate(el) {
+      var target = parseFloat(el.getAttribute('data-count'));
+      var suffix = el.getAttribute('data-suffix') || '';
+      if (reduce) { el.textContent = target + suffix; return; }
+      var dur = 1600, start = null;
+      function tick(now) {
+        if (start === null) start = now;
+        var p = Math.min((now - start) / dur, 1);
+        var eased = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; // ease-in-out cubic
+        el.textContent = Math.round(eased * target) + suffix;
+        if (p < 1) requestAnimationFrame(tick); else el.textContent = target + suffix;
+      }
+      requestAnimationFrame(tick);
+    }
+    if (!('IntersectionObserver' in window)) { Array.prototype.forEach.call(nums, animate); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { animate(e.target); io.unobserve(e.target); } });
+    }, { threshold: 0.5 });
+    Array.prototype.forEach.call(nums, function (n) { io.observe(n); });
+  })();
+  </script>
+
+  <script>
+  (function () {
+    // ResponseStream "fade" mode, ported to vanilla: split subtext into word
+    // segments and fade them in with a stagger when the card scrolls into view.
+    var els = document.querySelectorAll('.stream-fade');
+    if (!els.length) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var DELAY = 42; // ms between segments (segmentDelay)
+
+    function tokenize(el) {
+      var idx = 0;
+      (function walk(node) {
+        Array.prototype.slice.call(node.childNodes).forEach(function (child) {
+          if (child.nodeType === 3) { // text node
+            var parts = child.textContent.split(/(\s+)/).filter(function (s) { return s.length; });
+            var frag = document.createDocumentFragment();
+            parts.forEach(function (p) {
+              var span = document.createElement('span');
+              span.className = 'sf-seg' + (/^\s+$/.test(p) ? ' sf-seg--space' : '');
+              span.textContent = p;
+              span.style.animationDelay = (idx * DELAY) + 'ms';
+              idx++;
+              frag.appendChild(span);
+            });
+            node.replaceChild(frag, child);
+          } else if (child.nodeType === 1) { // element (e.g. <b>) — recurse, keep wrapper
+            walk(child);
+          }
+        });
+      })(el);
+    }
+
+    Array.prototype.forEach.call(els, tokenize);
+
+    if (reduce || !('IntersectionObserver' in window)) {
+      Array.prototype.forEach.call(els, function (el) { el.classList.add('is-in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    }, { threshold: 0.35 });
+    Array.prototype.forEach.call(els, function (el) { io.observe(el); });
+  })();
+  </script>
+
+  <script>
+  (function () {
+    // Radial orbital stakeholder map.
+    var orbit = document.querySelector('[data-orbit]');
+    if (!orbit) return;
+    var stage = orbit.querySelector('[data-orbit-stage]');
+    var hub = orbit.querySelector('.orbit__hub');
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var ICONS = {
+      users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+      mega: '<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+      heart: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.28"/>',
+      hands: '<path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>',
+      bank: '<line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/>',
+      gift: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>'
+    };
+
+    var data = [
+      { t: 'Rural community', tier: 'Primary', role: 'The everyday users of the app and the toilets, the people whose behaviour we set out to change.', inf: 100, rel: [1, 2], icon: 'users' },
+      { t: 'Local leaders', tier: 'Secondary', role: 'Trusted voices who can rally the community and lend credibility to the effort.', inf: 70, rel: [0, 4], icon: 'mega' },
+      { t: 'ASHA & health workers', tier: 'Secondary', role: 'Frontline workers who educate and support families day to day.', inf: 75, rel: [0, 4], icon: 'heart' },
+      { t: 'Facilitators', tier: 'Secondary', role: 'On-ground staff who run programs and activities in the village.', inf: 60, rel: [0, 5], icon: 'hands' },
+      { t: 'Government bodies', tier: 'Supporter', role: 'Mandate sanitation programs and provide funding and infrastructure.', inf: 55, rel: [1, 2, 5], icon: 'bank' },
+      { t: 'NGOs & funders', tier: 'Supporter', role: 'Partners and funders invested in long-term sanitation outcomes.', inf: 50, rel: [3, 4], icon: 'gift' }
+    ];
+    var N = data.length;
+
+    function svg(name) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + (ICONS[name] || '') + '</svg>'; }
+    function tierClass(t) { return t === 'Primary' ? 'otier--primary' : t === 'Secondary' ? 'otier--secondary' : 'otier--supporter'; }
+
+    var nodes = data.map(function (d, i) {
+      var el = document.createElement('div');
+      el.className = 'onode';
+      var conns = d.rel.map(function (r) { return '<button class="oconn" data-go="' + r + '">' + data[r].t + '</button>'; }).join('');
+      el.innerHTML =
+        '<div class="onode__dot" data-dot>' + svg(d.icon) + '</div>' +
+        '<div class="onode__label">' + d.t + '</div>' +
+        '<div class="onode__card">' +
+          '<div class="onode__top"><span class="otier ' + tierClass(d.tier) + '">' + d.tier + '</span></div>' +
+          '<div class="onode__ctitle">' + d.t + '</div>' +
+          '<p class="onode__role">' + d.role + '</p>' +
+          '<div class="obar-wrap"><div class="obar-lbl"><span>Influence</span><span>' + d.inf + '%</span></div><div class="obar"><span style="width:' + d.inf + '%"></span></div></div>' +
+          (d.rel.length ? '<div class="oconns"><h5>Connected to</h5><div>' + conns + '</div></div>' : '') +
+        '</div>';
+      stage.appendChild(el);
+      el.querySelector('[data-dot]').addEventListener('click', function (e) { e.stopPropagation(); toggle(i); });
+      Array.prototype.forEach.call(el.querySelectorAll('.oconn'), function (b) {
+        b.addEventListener('click', function (e) { e.stopPropagation(); toggle(parseInt(b.getAttribute('data-go'), 10)); });
+      });
+      return el;
+    });
+
+    var rot = 0, targetRot = null, auto = true, active = null, R = 160;
+    function computeR() { R = Math.min(stage.clientWidth, stage.clientHeight) * 0.34; }
+    computeR();
+
+    function place() {
+      for (var i = 0; i < N; i++) {
+        var base = (i / N) * 360;
+        var a = ((base + rot) % 360) * Math.PI / 180;
+        var x = R * Math.cos(a), y = R * Math.sin(a);
+        var el = nodes[i];
+        el.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)';
+        if (active === i) { el.style.zIndex = 300; el.style.opacity = 1; }
+        else { el.style.zIndex = String(Math.round(100 + 50 * Math.cos(a))); el.style.opacity = active === null ? Math.max(0.45, 0.45 + 0.55 * ((1 + Math.sin(a)) / 2)).toFixed(2) : (isRelated(i) ? 0.95 : 0.35); }
+      }
+    }
+    function isRelated(i) { return active !== null && data[active].rel.indexOf(i) !== -1; }
+
+    function loop() {
+      if (auto && !reduce) { rot = (rot + 0.12) % 360; }
+      else if (targetRot !== null) {
+        var d = targetRot - rot; d = ((d + 540) % 360) - 180;
+        if (Math.abs(d) < 0.12) { rot = ((targetRot % 360) + 360) % 360; targetRot = null; }
+        else { rot += d * 0.12; }
+      }
+      place();
+      requestAnimationFrame(loop);
+    }
+
+    function refreshClasses() {
+      nodes.forEach(function (el, i) {
+        el.classList.toggle('is-active', active === i);
+        el.classList.toggle('is-related', isRelated(i));
+      });
+    }
+    function toggle(i) {
+      if (active === i) { active = null; auto = true; targetRot = null; }
+      else {
+        active = i; auto = false;
+        var base = (i / N) * 360;
+        targetRot = ((-90 - base) % 360 + 360) % 360; // bring node to the top
+      }
+      refreshClasses();
+    }
+    function reset() { active = null; auto = true; targetRot = null; refreshClasses(); }
+
+    hub.addEventListener('click', reset);
+    orbit.addEventListener('click', function (e) { if (e.target === orbit || e.target === stage) reset(); });
+    window.addEventListener('resize', computeR);
+    requestAnimationFrame(loop);
+  })();
+  </script>
+
+  <script>
+  (function () {
+    // Solution flow videos: muted + looping; play while in view, pause when out.
+    var vids = document.querySelectorAll('.flow__video');
+    if (!vids.length) return;
+    if (!('IntersectionObserver' in window)) {
+      Array.prototype.forEach.call(vids, function (v) { v.play && v.play().catch(function () {}); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { try { e.target.currentTime = 0; } catch (err) {} e.target.play().catch(function () {}); }
+        else { e.target.pause(); }
+      });
+    }, { threshold: 0.3 });
+    Array.prototype.forEach.call(vids, function (v) {
+      io.observe(v);
+      v.addEventListener('mouseenter', function () { v.pause(); });
+      v.addEventListener('mouseleave', function () { v.play().catch(function () {}); });
+    });
+
+    // Browsers block unmuted autoplay until the user interacts; on the first
+    // gesture, unmute and play any sound video that's currently in view.
+    var soundVids = document.querySelectorAll('.flow__video--sound');
+    if (soundVids.length) {
+      var unlock = function () {
+        Array.prototype.forEach.call(soundVids, function (v) {
+          var r = v.getBoundingClientRect();
+          v.muted = false;
+          if (r.top < window.innerHeight && r.bottom > 0) v.play().catch(function () {});
+        });
+        document.removeEventListener('pointerdown', unlock);
+      };
+      document.addEventListener('pointerdown', unlock);
+    }
+  })();
+  </script>
+
+  <script>
+  (function () {
+    // Feature carousel: centre screen sharp, neighbours scaled + blurred, auto-advancing.
+    var root = document.querySelector('[data-fcar]');
+    if (!root) return;
+    var items = root.querySelectorAll('.fcar__item');
+    var N = items.length;
+    if (!N) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var cur = Math.floor(N / 2);
+
+    function render() {
+      for (var i = 0; i < N; i++) {
+        var pos = (((i - cur) % N) + N) % N;
+        if (pos > Math.floor(N / 2)) pos = pos - N;
+        var it = items[i];
+        var center = pos === 0, adj = Math.abs(pos) === 1;
+        it.style.transform = 'translateX(' + (pos * 45) + '%) scale(' + (center ? 1 : adj ? 0.85 : 0.7) + ') rotateY(' + (pos * -10) + 'deg)';
+        it.style.zIndex = center ? 10 : adj ? 5 : 1;
+        it.style.opacity = center ? 1 : adj ? 0.4 : 0;
+        it.style.filter = center ? 'blur(0px)' : 'blur(4px)';
+        it.style.visibility = Math.abs(pos) > 1 ? 'hidden' : 'visible';
+      }
+    }
+    function next() { cur = (cur + 1) % N; render(); }
+    function prev() { cur = (cur - 1 + N) % N; render(); }
+
+    render();
+
+    var timer = null;
+    function startAuto() { if (reduce) return; stopAuto(); timer = setInterval(next, 4000); }
+    function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
+
+    root.querySelector('[data-fcar-prev]').addEventListener('click', function () { prev(); startAuto(); });
+    root.querySelector('[data-fcar-next]').addEventListener('click', function () { next(); startAuto(); });
+    root.addEventListener('mouseenter', stopAuto);
+    root.addEventListener('mouseleave', startAuto);
+    startAuto();
+  })();
+  </script>
+
+  <script>
+  (function () {
+    // Usage-charts slider: cross-fade through the charts automatically.
+    var root = document.querySelector('[data-uslide]');
+    if (!root) return;
+    var imgs = root.querySelectorAll('.uslide__img');
+    var dots = root.querySelectorAll('[data-uslide-dots] button');
+    var N = imgs.length;
+    if (!N) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var cur = 0, timer = null;
+
+    function show(i) {
+      cur = (i + N) % N;
+      for (var k = 0; k < N; k++) {
+        imgs[k].classList.toggle('is-active', k === cur);
+        if (dots[k]) dots[k].classList.toggle('is-active', k === cur);
+      }
+    }
+    function next() { show(cur + 1); }
+    function start() { if (reduce) return; stop(); timer = setInterval(next, 4500); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+    Array.prototype.forEach.call(dots, function (d, i) {
+      d.addEventListener('click', function () { show(i); start(); });
+    });
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
+    start();
+  })();
+  </script>
+
+</body>
+</html>

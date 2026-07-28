@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alok Kachhap — UX & Product Designer</title>
+  <meta name="description" content="Alok Kachhap — UX & Product Designer. Fashion-trained, IIT Roorkee. Designing clear, human, beautifully-crafted digital products." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Schibsted+Grotesk:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="logo.svg" type="image/svg+xml" />
+</head>
+<body>
+  <!-- ============ PRELOADER ============ -->
+  <div class="loader" id="loader" role="status" aria-label="Loading">
+    <div class="loader__mark">
+      <span class="loader__ring" aria-hidden="true"></span>
+      <svg class="loader__logo" viewBox="0 0 62 73" fill="#1a1ac9" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path class="loader__petal" d="M25.6374 34.7552L25.6374 27.8672L52.7465 27.8672C49.216 32.2257 43.9103 34.7552 38.2988 34.7552L25.6374 34.7552Z" fill-opacity="0.53"/>
+        <path class="loader__petal" d="M27.8423 4.18866H36.5518V38.3036C36.5518 48.345 34.4319 58.2732 30.3306 67.4389L27.8423 73V4.18866Z" fill-opacity="0.71"/>
+        <path class="loader__petal" d="M27.9785 4.18857L36.4158 4.1879L19.6039 28.9488C16.6705 33.2692 11.8088 35.8538 6.61454 35.8541L27.9785 4.18857Z" fill-opacity="0.74"/>
+        <path class="loader__petal" d="M25.5653 37.1056L25.565 28.47L62 50.1075C52.8166 50.1078 43.7961 47.6795 35.8409 43.0655L25.5653 37.1056Z" fill-opacity="0.82"/>
+      </svg>
+    </div>
+    <div class="loader__count" aria-hidden="true"><span id="loaderCount">0</span>%</div>
+  </div>
+
+  <!-- scroll progress bar -->
+  <div class="progress" aria-hidden="true"><span></span></div>
+
+  <main id="top">
+    <!-- ============ HERO (smooth-scroll reveal) ============ -->
+    <!-- Ported from the React/framer-motion `SmoothScrollHero` to vanilla JS/CSS.
+         The tall section's height (1500px + 100vh) is set in script.js; the inner
+         frame is sticky and its clip-path + background-size animate on scroll. -->
+    <section class="hero-ss" id="hero" data-ss-scroll="1500" aria-label="Intro">
+      <div class="hero-ss__frame" data-ss-frame>
+        <!-- background video (scales on scroll like the original background-size zoom) -->
+        <video class="hero-ss__video" data-ss-video aria-hidden="true"
+               autoplay muted loop playsinline preload="auto">
+          <source src="media/plant-shadow.mp4" type="video/mp4" />
+        </video>
+
+      </div>
+
+      <!-- top-centre logo header -->
+      <header class="hero-logo">
+        <img src="media/alok-logo.svg" alt="Alok Kachhap" width="62" height="73" />
+      </header>
+
+      <!-- intro overlay — content centred over the video -->
+      <div class="hero-ss__intro" data-ss-overlay>
+        <div class="hero-ss__text">
+          <h1 class="hero-ss__name" data-typewriter="Hi, I’m Alok" aria-label="Hi, I’m Alok"><span class="tw-text" aria-hidden="true"></span><span class="tw-cursor" aria-hidden="true">|</span></h1>
+          <p class="hero-ss__sub">I design joyful, intuitive experiences with<br>a love for the little details.</p>
+          <div class="hero-ss__links">
+            <a class="hero-ss__icon" href="https://www.linkedin.com/in/alok-kachhap-659ab2163/" target="_blank" rel="noopener" data-cursor="LinkedIn" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.08 1.4-2.08 2.85V21H9z"/></svg>
+            </a>
+            <a class="hero-ss__resume" href="#" data-cursor="Resume">
+              <span class="hero-ss__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+              </span>
+              <span>Resume</span>
+            </a>
+          </div>
+
+          <!-- CTA — frame button (vanilla port of FrameButton): corner markers expand on hover -->
+          <div class="frame-btn-wrap">
+            <a href="work.html" class="frame-btn" data-cursor="work">
+              <span class="frame-btn__label">See my work</span>
+              <span class="frame-btn__m frame-btn__m--tl" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16v-8h8"/></svg></span>
+              <span class="frame-btn__m frame-btn__m--tr" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16v-8h-8"/></svg></span>
+              <span class="frame-btn__m frame-btn__m--br" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8v8h-8"/></svg></span>
+              <span class="frame-btn__m frame-btn__m--bl" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8v8h8"/></svg></span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 3D tilt card (vanilla port of the React InteractiveTravelCard) -->
+        <div class="tcard-wrap" data-cursor="explore">
+          <article class="tcard" data-tcard>
+            <div class="tcard__inner">
+              <img class="tcard__img" src="media/card-portrait.jpg" alt="Alok Kachhap" />
+              <!-- leaf-shadow video cast over the photo (multiply) to merge it with the background -->
+              <video class="tcard__shadow" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+                <source src="media/plant-shadow.mp4" type="video/mp4" />
+              </video>
+              <div class="tcard__overlay"></div>
+              <div class="tcard__content">
+                <div class="tcard__head">
+                  <div class="tcard__titles">
+                    <h2 class="tcard__title">Alok Kachhap</h2>
+                    <p class="tcard__sub">UI/UX Designer</p>
+                  </div>
+                  <a class="tcard__link" href="#" aria-label="Know more about Alok Kachhap">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- ============ MUSIC (equalizer CTA + collapsible player) ============ -->
+      <div class="music" data-music>
+       <div class="mplayer" data-player aria-label="Music player">
+        <audio data-audio preload="metadata"></audio>
+        <div class="mplayer__disc" data-disc>
+          <div class="spin" data-spin>
+            <img class="cover" data-cover alt="Album cover" draggable="false" />
+          </div>
+          <div class="hole"></div>
+        </div>
+        <div class="mplayer__info">
+          <div class="mplayer__top">
+            <svg class="scales" data-scales viewBox="0 0 98 108" aria-hidden="true"></svg>
+            <div class="track-info">
+              <p class="artist" data-artist></p>
+              <h3 class="track" data-title></h3>
+            </div>
+          </div>
+          <div class="bar" data-bar><div class="bar-fill" data-fill></div></div>
+          <div class="time"><span data-cur>0:00</span><span class="sep">/</span><span data-dur>0:00</span></div>
+          <div class="controls">
+            <button class="ctrl ctrl-toggle" type="button" data-shuffle aria-label="Shuffle">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/><path d="M16 21h5v-5"/><path d="M21 21l-7-7"/><path d="M3 3l7 7"/></svg>
+            </button>
+            <button class="ctrl" type="button" data-prev aria-label="Previous">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 5L8 12l11 7zM5 5h2v14H5z"/></svg>
+            </button>
+            <button class="ctrl ctrl-play" type="button" data-toggle aria-label="Play"></button>
+            <button class="ctrl" type="button" data-next aria-label="Next">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M5 5l11 7L5 19zM17 5h2v14h-2z"/></svg>
+            </button>
+            <button class="ctrl ctrl-toggle ctrl-loop" type="button" data-loop aria-label="Loop">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12V8a2 2 0 0 1 2-2h12"/><path d="M16 3l4 3l-4 3"/><path d="M20 12v4a2 2 0 0 1-2 2H6"/><path d="M8 21l-4-3l4-3"/></svg>
+              <span class="loop-one">1</span>
+            </button>
+          </div>
+        </div>
+       </div>
+        <button class="music__fab" type="button" data-music-toggle aria-label="Play music">
+          <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ============ SKILLS RADAR ============ -->
+    <section class="skills" id="skills" aria-label="What I do">
+      <div class="skills__head">
+        <p class="skills__eyebrow">What I do</p>
+        <h2 class="skills__title">Designing the whole experience</h2>
+        <p class="skills__sub">From first sketch to final pixel — research, structure, and interface.</p>
+      </div>
+
+      <div class="radar" data-radar>
+        <div class="radar__rings" aria-hidden="true">
+          <span style="--s:9rem;  --o:.85"></span>
+          <span style="--s:17rem; --o:.65"></span>
+          <span style="--s:25rem; --o:.48"></span>
+          <span style="--s:33rem; --o:.34"></span>
+          <span style="--s:41rem; --o:.22"></span>
+          <span style="--s:49rem; --o:.12"></span>
+        </div>
+        <div class="radar__sweep" aria-hidden="true"></div>
+
+        <div class="radar__icons">
+          <div class="skill" style="--x:8%;--y:80%;--d:.05s"><span class="skill__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg></span><span class="skill__t">Web design</span></div>
+          <div class="skill" style="--x:25%;--y:58%;--d:.18s"><span class="skill__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span><span class="skill__t">UX Research</span></div>
+          <div class="skill" style="--x:42%;--y:44%;--d:.31s"><span class="skill__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg></span><span class="skill__t">Mobile apps</span></div>
+          <div class="skill" style="--x:58%;--y:44%;--d:.44s"><span class="skill__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></svg></span><span class="skill__t">Information architecture</span></div>
+          <div class="skill" style="--x:75%;--y:58%;--d:.57s"><span class="skill__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></span><span class="skill__t">Prototyping</span></div>
+          <div class="skill" style="--x:92%;--y:80%;--d:.7s"><span class="skill__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.84Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg></span><span class="skill__t">UI design</span></div>
+        </div>
+
+        <div class="radar__baseline" aria-hidden="true"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ CARD DRAWER (glass, slides in from the left) ============ -->
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer__scrim" data-drawer-close></div>
+    <aside class="drawer__panel" role="dialog" aria-modal="true" aria-label="About Alok Kachhap">
+      <button class="drawer__close" type="button" data-drawer-close aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+
+      <div class="drawer__slider">
+        <div class="drawer__track" data-drawer-track>
+          <!-- Page 1 — About me -->
+          <section class="drawer__slide" data-drawer-slide aria-label="About me">
+            <h2 class="drawer__title">About me</h2>
+            <p class="drawer__bio">I’m a <span class="drawer__hl">UI/UX designer</span> with <span class="drawer__hl">5+ years</span> of creative experience <span class="drawer__hl">2 in fashion design</span> and <span class="drawer__hl">3+ in digital product design</span>. I started at <span class="drawer__hl drawer__hl--mark">NIFT</span>, then earned my Master’s at <span class="drawer__hl drawer__hl--mark">IIT Roorkee</span>, blending creativity with user-centered thinking. From sketching garments to crafting seamless user flows, I love designing things that are both smart and beautiful.</p>
+
+            <!-- 3D location card (vanilla port of the React LocationCard) -->
+            <div class="loccards">
+              <article class="loccard" data-loccard>
+                <div class="loccard__inner" style="background-image:url('media/nift-chennai.jpg')">
+                  <div class="loccard__overlay"></div>
+                </div>
+                <div class="loccard__content">
+                  <div>
+                    <h3 class="loccard__city">NIFT, Chennai</h3>
+                    <p class="loccard__addr">Bachelor’s in Design</p>
+                  </div>
+                </div>
+              </article>
+
+              <article class="loccard" data-loccard>
+                <div class="loccard__inner" style="background-image:url('media/iit-roorkee.jpg')">
+                  <div class="loccard__overlay"></div>
+                </div>
+                <div class="loccard__content">
+                  <div>
+                    <h3 class="loccard__city">IIT, Roorkee</h3>
+                    <p class="loccard__addr">Master’s in Design</p>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+          <!-- Page 2 — Photo gallery (3D image sphere, vanilla port of SphereImageGrid) -->
+          <section class="drawer__slide drawer__slide--center" data-drawer-slide aria-label="Photo gallery">
+            <h2 class="drawer__title">Photo gallery</h2>
+            <!-- flip gallery (vanilla port of FlipGallery) -->
+            <div class="flipg-wrap">
+              <div class="flipg" data-flip>
+                <div class="unite top"></div>
+                <div class="unite bottom"></div>
+                <div class="unite overlay-top"></div>
+                <div class="unite overlay-bottom"></div>
+              </div>
+              <div class="flipg__nav">
+                <button type="button" class="flipg__btn" data-flip-prev aria-label="Previous photo">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <button type="button" class="flipg__btn" data-flip-next aria-label="Next photo">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="drawer__dots" data-drawer-dots role="tablist">
+        <button class="drawer__dot is-active" type="button" data-drawer-go="0" aria-label="About me"></button>
+        <button class="drawer__dot" type="button" data-drawer-go="1" aria-label="Photo gallery"></button>
+      </div>
+    </aside>
+  </div>
+
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+  (function () {
+    // Reveal the skills radar's icons (staggered) when it scrolls into view.
+    var skills = document.getElementById('skills');
+    if (!skills) return;
+    if (!('IntersectionObserver' in window)) { skills.classList.add('is-in'); return; }
+    new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { skills.classList.add('is-in'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.25 }).observe(skills);
+  })();
+  </script>
+</body>
+</html>
