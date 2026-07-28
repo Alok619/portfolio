@@ -8,7 +8,7 @@
 //
 // Uses the Gemini REST API via global fetch (Node 18+), so no npm SDK is needed.
 
-const MODEL = 'gemini-2.5-flash';
+const MODEL = 'gemini-flash-latest';
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
