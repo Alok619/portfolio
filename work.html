@@ -142,15 +142,15 @@
       font-variation-settings: 'opsz' 144, 'wght' 600; font-size: clamp(28px, 4.6vw, 56px);
       line-height: 1.04; letter-spacing: -0.01em; color: #1a1c18; max-width: 18ch; }
     .footer__hl { color: #1a1ac9; }
-    /* sparkles effect on a word */
-    .sparkles { position: relative; display: inline-block; }
-    .sparkle { position: absolute; z-index: 2; pointer-events: none; opacity: 0;
-      transform-origin: center; animation: sparkleTwinkle 0.8s ease-in-out infinite; }
-    @keyframes sparkleTwinkle {
-      0% { opacity: 0; transform: scale(0) rotate(75deg); }
-      50% { opacity: 1; transform: scale(var(--s, 1)) rotate(120deg); }
-      100% { opacity: 0; transform: scale(0) rotate(150deg); }
+    /* shimmer-wave effect on a word (vanilla port of TextShimmerWave) */
+    .tsw { display: inline-block; perspective: 500px; --tsw-base: #1a1ac9; --tsw-peak: #7b86ff; }
+    .tsw__ch { display: inline-block; white-space: pre; transform-style: preserve-3d;
+      color: var(--tsw-base); animation: tswWave 2s ease-in-out infinite; animation-delay: var(--d, 0s); }
+    @keyframes tswWave {
+      0%, 50%, 100% { transform: translate3d(0, 0, 0) scale(1) rotateY(0deg); color: var(--tsw-base); }
+      25% { transform: translate3d(2px, -2px, 10px) scale(1.12) rotateY(10deg); color: var(--tsw-peak); }
     }
+    @media (prefers-reduced-motion: reduce) { .tsw__ch { animation: none; color: var(--tsw-base); } }
     .footer__contact { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px;
       font-size: clamp(13px, 1.5vw, 16px); color: #2e2e2e; }
     .footer__contact a { color: #2e2e2e; text-decoration: none; transition: color 0.2s ease; }
@@ -364,7 +364,7 @@
 
   <!-- Footer (over the leaf-shadow video) -->
   <footer class="site-footer">
-    <h2 class="footer__head">Let&rsquo;s do something <span class="footer__hl sparkles" data-sparkles>amazing</span><br>together.</h2>
+    <h2 class="footer__head">Let&rsquo;s do something <span class="footer__hl tsw" data-tsw>amazing</span><br>together.</h2>
     <div class="footer__contact">
       <a href="https://www.linkedin.com/in/alok-kachhap-659ab2163/" target="_blank" rel="noopener">LinkedIn</a>
       <span class="dot">•</span>
@@ -731,39 +731,21 @@
   </script>
 
   <script>
-  // ---------- sparkles text (vanilla port of SparklesText) ----------
+  // ---------- shimmer-wave text (vanilla port of TextShimmerWave) ----------
   (function () {
-    const host = document.querySelector('[data-sparkles]');
+    var host = document.querySelector('[data-tsw]');
     if (!host) return;
-    const NS = 'http://www.w3.org/2000/svg';
-    const STAR = 'M9.82531 0.843845C10.0553 0.215178 10.9446 0.215178 11.1746 0.843845L11.8618 2.72026C12.4006 4.19229 12.3916 6.39157 13.5 7.5C14.6084 8.60843 16.8077 8.59935 18.2797 9.13822L20.1561 9.82534C20.7858 10.0553 20.7858 10.9447 20.1561 11.1747L18.2797 11.8618C16.8077 12.4007 14.6084 12.3916 13.5 13.5C12.3916 14.6084 12.4006 16.8077 11.8618 18.2798L11.1746 20.1562C10.9446 20.7858 10.0553 20.7858 9.82531 20.1562L9.13819 18.2798C8.59932 16.8077 8.60843 14.6084 7.5 13.5C6.39157 12.3916 4.19225 12.4007 2.72023 11.8618L0.843814 11.1747C0.215148 10.9447 0.215148 10.0553 0.843814 9.82534L2.72023 9.13822C4.19225 8.59935 6.39157 8.60843 7.5 7.5C8.60843 6.39157 8.59932 4.19229 9.13819 2.72026L9.82531 0.843845Z';
-    const COLORS = { first: '#9E7AFF', second: '#FE8BBB' };
-    const COUNT = 10;
-    const rand = () => ({
-      x: Math.random() * 100, y: Math.random() * 100,
-      color: Math.random() > 0.5 ? COLORS.first : COLORS.second,
-      delay: Math.random() * 2, scale: Math.random() * 1 + 0.3, life: Math.random() * 10 + 5
-    });
-    function make() {
-      const svg = document.createElementNS(NS, 'svg');
-      svg.setAttribute('class', 'sparkle'); svg.setAttribute('width', '18'); svg.setAttribute('height', '18'); svg.setAttribute('viewBox', '0 0 21 21');
-      const p = document.createElementNS(NS, 'path'); p.setAttribute('d', STAR); svg.appendChild(p);
-      host.appendChild(svg); return svg;
+    var text = host.textContent;
+    var len = text.length, duration = 1, spread = 1; // component defaults
+    host.textContent = '';
+    for (var i = 0; i < len; i++) {
+      var span = document.createElement('span');
+      span.className = 'tsw__ch';
+      span.textContent = text[i];
+      // stagger by letter, matching delay = (i * duration / len) from the component
+      span.style.setProperty('--d', ((i * duration * (1 / spread)) / len).toFixed(3) + 's');
+      host.appendChild(span);
     }
-    function apply(s) {
-      s.el.style.left = s.x + '%'; s.el.style.top = s.y + '%';
-      s.el.firstChild.setAttribute('fill', s.color);
-      s.el.style.setProperty('--s', s.scale);
-      s.el.style.animationDelay = s.delay + 's';
-    }
-    const stars = [];
-    for (let i = 0; i < COUNT; i++) { const s = rand(); s.el = make(); apply(s); stars.push(s); }
-    setInterval(function () {
-      stars.forEach(function (s) {
-        if (s.life <= 0) { const r = rand(); s.x = r.x; s.y = r.y; s.color = r.color; s.delay = r.delay; s.scale = r.scale; s.life = r.life; apply(s); }
-        else s.life -= 0.1;
-      });
-    }, 100);
   })();
   </script>
 
