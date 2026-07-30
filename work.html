@@ -133,6 +133,7 @@
     @media (max-width: 767px) {
       .xcards { height: 600px; grid-template-columns: 1fr; grid-template-rows: 5fr 1fr 1fr 1fr; }
     }
+    .sub-touch { display: none; }
     /* Touch devices (no hover): show all projects as a full vertical stack, one tap opens it */
     @media (hover: none) and (pointer: coarse) {
       .xcards { grid-template-columns: 1fr !important; grid-template-rows: none !important;
@@ -141,6 +142,8 @@
       .xcard__vtitle { display: none !important; }
       .xcard__time, .xcard__icon, .xcard__title, .xcard__link, .xcard__desc { opacity: 1 !important; }
       .xcard__award { opacity: 1 !important; transform: none !important; }
+      .sub-hover { display: none; }
+      .sub-touch { display: inline; }
     }
 
 
@@ -298,7 +301,7 @@
   <section class="projects" id="projects">
     <div class="projects__head">
       <h2 class="projects__title">Selected Work</h2>
-      <p class="projects__sub">Four projects I'm proud of. Hover or tap a card to unveil it.</p>
+      <p class="projects__sub">Four projects I'm proud of. <span class="sub-hover">Hover or tap a card to unveil it.</span><span class="sub-touch">Tap a card to open it.</span></p>
     </div>
     <ul class="xcards" data-xcards>
       <li class="xcard" tabindex="0" data-href="atisfyreach.html">
