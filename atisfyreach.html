@@ -121,6 +121,10 @@
       border: 1px solid var(--line); box-shadow: 0 24px 60px -24px rgba(0,0,0,0.35); background: #0e0f0d;
       user-select: none; -webkit-user-select: none; touch-action: none; cursor: ew-resize; }
     .ba__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: left center; display: block; }
+    /* bare variant — no card chrome, just the images */
+    .ba--plain { background: transparent; border: 0; box-shadow: none; border-radius: 0; }
+    .ba--plain .ba__before { background: transparent; }
+    .ba--plain .ba__img { object-fit: contain; object-position: center; }
     .ba__before { position: absolute; inset: 0; overflow: hidden; clip-path: inset(0 calc(100% - var(--p)) 0 0);
       background: rgba(255,255,255,0.04); }
     .ba__placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
@@ -642,6 +646,21 @@
         <video class="desktop-mock__screen" src="media/mockups/campaign-flow-mute.mp4" muted playsinline preload="metadata"></video>
         <div class="shot__cap" style="padding-top:16px;"><span class="shot__name">Campaign creation flow</span><span class="shot__desc">A walkthrough of the guided, step-by-step flow that replaced the old single-page setup.</span></div>
       </div>
+
+      <div class="ba ba--plain" style="--p:50%; aspect-ratio: 2337 / 1316; margin-top: clamp(28px, 4vw, 44px);">
+        <img class="ba__img" src="media/picture/Screens/Dark.png" alt="Dark mode" draggable="false" />
+        <div class="ba__before">
+          <img class="ba__img" src="media/picture/Screens/Light.png" alt="Light mode" draggable="false" />
+        </div>
+        <div class="ba__handle">
+          <div class="ba__knob">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/><path d="m9 6 6 6-6 6"/></svg>
+          </div>
+        </div>
+        <span class="ba__tag ba__tag--before">Light</span>
+        <span class="ba__tag ba__tag--after">Dark</span>
+      </div>
+      <div class="shot__cap" style="padding-top:16px;"><span class="shot__name">Light &amp; dark mode</span><span class="shot__desc">Drag the handle to compare the same screen in light and dark mode.</span></div>
     </div>
   </section>
 
