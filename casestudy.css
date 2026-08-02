@@ -299,3 +299,16 @@
     .toc__item i { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); flex: none; opacity: 0; transition: opacity 0.25s ease; }
     .toc__item.is-active i { opacity: 1; }
     @media (prefers-reduced-motion: reduce) { .toc__island, .toc__pill, .toc__panel, .toc__ring-fg, .toc__item span { transition: none; } }
+
+/* ===== project nav (prev / next case study) ===== */
+.pnav { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 2vw, 20px);
+  max-width: var(--maxw, 1080px); margin: 0 auto;
+  padding: clamp(44px, 6vw, 80px) clamp(20px, 5vw, 40px) clamp(20px, 3vw, 32px); }
+.pnav__link { display: flex; flex-direction: column; gap: 6px; padding: clamp(18px, 2.4vw, 26px);
+  border: 1px solid var(--line); border-radius: 16px; background: var(--surface); text-decoration: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; }
+.pnav__link--next { text-align: right; align-items: flex-end; }
+.pnav__link:hover { border-color: rgba(26,26,201,0.3); box-shadow: 0 18px 40px -24px rgba(26,26,201,0.3); transform: translateY(-3px); }
+.pnav__dir { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); }
+.pnav__name { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: clamp(19px, 2.6vw, 27px); color: var(--ink); line-height: 1.12; }
+@media (max-width: 560px) { .pnav { grid-template-columns: 1fr; } .pnav__link--next { text-align: left; align-items: flex-start; } }

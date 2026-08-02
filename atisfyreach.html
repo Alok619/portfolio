@@ -316,6 +316,19 @@
     .lb__close:hover { background: rgba(255,255,255,0.28); }
     .lb__close svg { width: 20px; height: 20px; }
 
+    /* project nav (prev / next case study) */
+    .pnav { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 2vw, 20px);
+      max-width: var(--maxw, 1080px); margin: 0 auto;
+      padding: clamp(44px, 6vw, 80px) clamp(20px, 5vw, 40px) clamp(20px, 3vw, 32px); }
+    .pnav__link { display: flex; flex-direction: column; gap: 6px; padding: clamp(18px, 2.4vw, 26px);
+      border: 1px solid var(--line); border-radius: 16px; background: var(--surface); text-decoration: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; }
+    .pnav__link--next { text-align: right; align-items: flex-end; }
+    .pnav__link:hover { border-color: rgba(26,26,201,0.3); box-shadow: 0 18px 40px -24px rgba(26,26,201,0.3); transform: translateY(-3px); }
+    .pnav__dir { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); }
+    .pnav__name { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: clamp(19px, 2.6vw, 27px); color: var(--ink); line-height: 1.12; }
+    @media (max-width: 560px) { .pnav { grid-template-columns: 1fr; } .pnav__link--next { text-align: left; align-items: flex-start; } }
+
     /* footer */
     .cs-footer { background: var(--ink); color: #f3f3ee; text-align: center; position: relative; overflow: hidden; }
     .cs-footer .neuro-bg { position: absolute; inset: 0; z-index: 0; display: block; }
@@ -375,6 +388,18 @@
     .toc__item.is-active i { opacity: 1; }
     @media (prefers-reduced-motion: reduce) { .toc__island, .toc__pill, .toc__panel, .toc__ring-fg, .toc__item span { transition: none; } }
   </style>
+  <!-- Social share previews (Open Graph / Twitter) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Alok Kachhap" />
+  <meta property="og:title" content="Atisfyreach · Case Study · Alok Kachhap" />
+  <meta property="og:description" content="End-to-end product revamp and design system for the Atisfyreach influencer-marketing platform." />
+  <meta property="og:url" content="https://alok-kachhap.vercel.app/atisfyreach.html" />
+  <meta property="og:image" content="https://alok-kachhap.vercel.app/media/atisfyreach-cover.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Atisfyreach · Case Study · Alok Kachhap" />
+  <meta name="twitter:description" content="End-to-end product revamp and design system for the Atisfyreach influencer-marketing platform." />
+  <meta name="twitter:image" content="https://alok-kachhap.vercel.app/media/atisfyreach-cover.png" />
+
 </head>
 <body>
 
@@ -751,6 +776,18 @@
       </div>
     </div>
   </section>
+
+  <!-- ===== project nav ===== -->
+  <nav class="pnav" aria-label="More case studies">
+    <a class="pnav__link pnav__link--prev" href="facts.html">
+      <span class="pnav__dir">&larr; Previous</span>
+      <span class="pnav__name">Facts</span>
+    </a>
+    <a class="pnav__link pnav__link--next" href="raksha.html">
+      <span class="pnav__dir">Next project &rarr;</span>
+      <span class="pnav__name">Raksha</span>
+    </a>
+  </nav>
 
   <!-- ===== footer ===== -->
   <footer class="cs-footer">
