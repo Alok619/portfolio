@@ -322,3 +322,7 @@
 @media (max-width: 560px) { .pnav { grid-template-columns: 1fr; }
   .pnav__link, .pnav__link--next { flex-direction: row; justify-content: flex-start; }
   .pnav__link--prev .pnav__text, .pnav__link--next .pnav__text { align-items: flex-start; text-align: left; } }
+
+/* ===== reading progress bar ===== */
+.read-progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 60; pointer-events: none; }
+.read-progress__bar { display: block; height: 100%; width: 0; background: var(--blue); transition: width 0.08s linear; }

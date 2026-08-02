@@ -118,6 +118,9 @@
 
     /* ===== hero ===== */
     .cs-hero { padding-top: clamp(120px, 18vh, 180px); }
+    /* reading progress bar */
+    .read-progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 60; pointer-events: none; }
+    .read-progress__bar { display: block; height: 100%; width: 0; background: var(--blue); transition: width 0.08s linear; }
     .cs-hero__meta { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; color: var(--muted); font-size: 13px; }
     .cs-hero__meta .dot { opacity: 0.4; }
     .cs-hero__title { font-size: clamp(52px, 11vw, 132px); color: var(--blue); margin: 20px 0 16px; }
@@ -412,6 +415,7 @@
 
 </head>
 <body>
+  <div class="read-progress" aria-hidden="true"><span class="read-progress__bar" data-read-progress></span></div>
 
   <!-- ===== header ===== -->
   <header class="site-header">
@@ -434,6 +438,7 @@
         <span class="eyebrow">Case Study</span>
         <span class="dot">•</span> Influencer Marketing
         <span class="dot">•</span> Brand Side
+        <span class="dot">•</span> <span data-readtime></span>
       </p>
       <h1 class="cs-hero__title display">Atisfyreach</h1>
       <p class="cs-hero__tagline">Rebuilding a complex AI marketing platform into a clear, scalable experience brands can grow with.</p>
@@ -1186,6 +1191,30 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     onScroll();
+  })();
+  </script>
+
+  <script>
+  (function () {
+    // Reading progress bar + estimated read time
+    var bar = document.querySelector('[data-read-progress]');
+    if (bar) {
+      var update = function () {
+        var h = document.documentElement;
+        var max = h.scrollHeight - h.clientHeight;
+        bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+      };
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    }
+    var rt = document.querySelector('[data-readtime]');
+    if (rt) {
+      var text = '';
+      Array.prototype.forEach.call(document.querySelectorAll('section'), function (s) { text += ' ' + (s.innerText || s.textContent || ''); });
+      var words = (text.trim().match(/\S+/g) || []).length;
+      rt.textContent = Math.max(1, Math.round(words / 200)) + ' min read';
+    }
   })();
   </script>
 

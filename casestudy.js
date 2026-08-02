@@ -280,3 +280,25 @@
     window.addEventListener('resize', onScroll);
     onScroll();
   })();
+
+/* ===== reading progress bar + estimated read time ===== */
+(function () {
+  var bar = document.querySelector('[data-read-progress]');
+  if (bar) {
+    var update = function () {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+  var rt = document.querySelector('[data-readtime]');
+  if (rt) {
+    var text = '';
+    Array.prototype.forEach.call(document.querySelectorAll('section'), function (s) { text += ' ' + (s.innerText || s.textContent || ''); });
+    var words = (text.trim().match(/\S+/g) || []).length;
+    rt.textContent = Math.max(1, Math.round(words / 200)) + ' min read';
+  }
+})();
