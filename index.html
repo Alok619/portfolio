@@ -197,6 +197,29 @@
         <div class="radar__baseline" aria-hidden="true"></div>
       </div>
     </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="contact" id="contact" aria-label="Get in touch">
+      <div class="contact__inner">
+        <span class="contact__eyebrow">Get in touch</span>
+        <h2 class="contact__title">Let&rsquo;s build something together</h2>
+        <p class="contact__sub">Have a role, a project, or just want to say hi? Drop me a message and I&rsquo;ll get back to you.</p>
+        <form class="cform" data-cform>
+          <input type="hidden" name="_subject" value="New message from your portfolio" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="text" name="_honey" class="cform__hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <div class="cform__row">
+            <label class="cform__field"><span>Name</span><input name="name" type="text" required placeholder="Your name" /></label>
+            <label class="cform__field"><span>Email</span><input name="email" type="email" required placeholder="you@email.com" /></label>
+          </div>
+          <label class="cform__field"><span>Message</span><textarea name="message" rows="5" required placeholder="Tell me a bit about it…"></textarea></label>
+          <button class="cform__submit" type="submit">Send message</button>
+          <p class="cform__status" data-cform-status role="status" aria-live="polite"></p>
+        </form>
+        <p class="contact__alt">Prefer email? <a href="mailto:alok.kac@gmail.com">alok.kac@gmail.com</a></p>
+      </div>
+    </section>
   </main>
 
   <!-- ============ CARD DRAWER (glass, slides in from the left) ============ -->
@@ -285,6 +308,41 @@
         if (e.isIntersecting) { skills.classList.add('is-in'); obs.unobserve(e.target); }
       });
     }, { threshold: 0.25 }).observe(skills);
+  })();
+  </script>
+
+  <script>
+  (function () {
+    // Contact form: submit to Web3Forms via fetch, show inline status (no page reload).
+    var form = document.querySelector('[data-cform]');
+    if (!form) return;
+    var status = form.querySelector('[data-cform-status]');
+    var btn = form.querySelector('.cform__submit');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      status.className = 'cform__status';
+      status.textContent = 'Sending…';
+      btn.disabled = true;
+      fetch('https://formsubmit.co/ajax/alok.kac@gmail.com', {
+        method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(form)
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (json) {
+          if (json.success === true || json.success === 'true') {
+            status.textContent = 'Thanks! Your message is on its way.';
+            status.classList.add('is-ok');
+            form.reset();
+          } else {
+            status.textContent = (json && json.message) || 'Something went wrong. Please email me directly.';
+            status.classList.add('is-err');
+          }
+        })
+        .catch(function () {
+          status.textContent = 'Network error. Please email me at alok.kac@gmail.com.';
+          status.classList.add('is-err');
+        })
+        .finally(function () { btn.disabled = false; });
+    });
   })();
   </script>
 
