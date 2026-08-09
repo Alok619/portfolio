@@ -50,21 +50,18 @@
   <!-- scroll progress bar -->
   <div class="progress" aria-hidden="true"><span></span></div>
 
+  <!-- fixed background video (leaf shadows) — stays put while all content scrolls over it -->
+  <video id="page-bg" aria-hidden="true" autoplay muted loop playsinline preload="auto">
+    <source src="media/plant-shadow.mp4" type="video/mp4" />
+  </video>
+  <div class="page-bg-scrim" aria-hidden="true"></div>
+
   <main id="top">
-    <!-- ============ HERO (smooth-scroll reveal) ============ -->
+    <!-- ============ HERO ============ -->
     <!-- Ported from the React/framer-motion `SmoothScrollHero` to vanilla JS/CSS.
          The tall section's height (1500px + 100vh) is set in script.js; the inner
          frame is sticky and its clip-path + background-size animate on scroll. -->
-    <section class="hero-ss" id="hero" data-ss-scroll="1500" aria-label="Intro">
-      <div class="hero-ss__frame" data-ss-frame>
-        <!-- background video (scales on scroll like the original background-size zoom) -->
-        <video class="hero-ss__video" data-ss-video aria-hidden="true"
-               autoplay muted loop playsinline preload="auto">
-          <source src="media/plant-shadow.mp4" type="video/mp4" />
-        </video>
-
-      </div>
-
+    <section class="hero-ss" id="hero" aria-label="Intro">
       <!-- top-centre logo header -->
       <header class="hero-logo">
         <img src="media/alok-logo.svg" alt="Alok Kachhap" width="62" height="73" />
@@ -343,6 +340,19 @@
         })
         .finally(function () { btn.disabled = false; });
     });
+  })();
+  </script>
+
+  <script>
+  (function () {
+    // Nudge the fixed background video to keep playing (autoplay can be lazy / paused when backgrounded).
+    var v = document.getElementById('page-bg');
+    if (!v) return;
+    var go = function () { var p = v.play && v.play(); if (p && p.catch) p.catch(function () {}); };
+    go();
+    v.addEventListener('canplay', go);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) go(); });
+    window.addEventListener('pageshow', go);
   })();
   </script>
 
